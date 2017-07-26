@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Shopping List</string>
+    <string name="create_shopping_list_button_text">Create Shopping List</string>
+    <string name="create_shopping_list_name_edittext">name</string>
+    <string name="create_shopping_list_validation_error">Shopping List name is required.</string>
+    <string name="create_shopping_list_success">Shopping List created.</string>
+    <string name="create_shopping_list_error">Unable to create Shopping List.</string>
+</resources>
