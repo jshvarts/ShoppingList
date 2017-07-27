@@ -1,5 +1,10 @@
 package com.jshvarts.shoppinglist.common.domain.model;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
+
+import java.util.Map;
+
 public class ShoppingList {
 
     private String id;
@@ -34,11 +39,12 @@ public class ShoppingList {
         this.template = template;
     }
 
-    public Long getTimestamp() {
-        return timestamp;
+    public Map<String, String> getTimestamp() {
+        return ServerValue.TIMESTAMP;
     }
 
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
+    @Exclude
+    public Long getTimestampLong() {
+        return timestamp;
     }
 }

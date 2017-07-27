@@ -41,7 +41,6 @@ public class ShoppingListRepository implements Repository<ShoppingList> {
         DatabaseReference singleListRef = dbRef.push();
         singleListRef.setValue(shoppingList);
         return Completable.complete();
-        //return Completable.error(new IllegalArgumentException("Error saving shoppingList."));
     }
 
     @Override
