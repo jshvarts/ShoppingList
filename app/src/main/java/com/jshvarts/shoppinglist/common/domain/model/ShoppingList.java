@@ -1,20 +1,29 @@
 package com.jshvarts.shoppinglist.common.domain.model;
 
 import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ServerValue;
 
+import java.util.List;
 import java.util.Map;
 
+@IgnoreExtraProperties
 public class ShoppingList {
 
     private String id;
-    private String name;
-    private Boolean template;
+    // Only List is supported by Firebase. Set would be more is more applicable though
+    private List<ShoppingListItem> items;
     private Long timestamp;
 
     public ShoppingList() {
+        // required by Firebase
     }
 
+    public ShoppingList(List<ShoppingListItem> items) {
+        this.items = items;
+    }
+
+    @Exclude
     public String getId() {
         return id;
     }
@@ -23,20 +32,12 @@ public class ShoppingList {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public List<ShoppingListItem> getItems() {
+        return items;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Boolean getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(Boolean template) {
-        this.template = template;
+    public void setItems(List<ShoppingListItem> items) {
+        this.items = items;
     }
 
     public Map<String, String> getTimestamp() {
@@ -46,5 +47,10 @@ public class ShoppingList {
     @Exclude
     public Long getTimestampLong() {
         return timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return id;
     }
 }

@@ -12,8 +12,9 @@ import dagger.Provides;
 public class LobbyModule {
 
     @Provides
-    LobbyViewModelFactory provideLobbyViewModelFactory(CreateShoppingListUseCase loadLobbyGreetingUseCase,
+    LobbyViewModelFactory provideLobbyViewModelFactory(LoadShoppingListUseCase loadShoppingListUseCase,
+                                                       CreateShoppingListUseCase createShoppingListUseCase,
                                                        SchedulersFacade schedulersFacade) {
-        return new LobbyViewModelFactory(loadLobbyGreetingUseCase, schedulersFacade);
+        return new LobbyViewModelFactory(loadShoppingListUseCase, createShoppingListUseCase, schedulersFacade);
     }
 }

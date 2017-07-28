@@ -3,7 +3,7 @@ package com.jshvarts.shoppinglist.di;
 import android.content.Context;
 
 import com.jshvarts.shoppinglist.App;
-import com.jshvarts.shoppinglist.common.domain.model.ShoppingListRepository;
+import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingListRepository;
 
 import javax.inject.Singleton;
 
@@ -23,7 +23,7 @@ public class AppModule {
 
     @Singleton
     @Provides
-    ShoppingListRepository provideCircleRepository() {
-        return new ShoppingListRepository();
+    FirebaseShoppingListRepository provideFirebaseShoppingListRepository() {
+        return new FirebaseShoppingListRepository();
     }
 }

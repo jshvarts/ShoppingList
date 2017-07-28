@@ -3,6 +3,7 @@ package com.jshvarts.shoppinglist.lobby;
 import android.arch.lifecycle.LifecycleActivity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -11,6 +12,8 @@ import android.widget.Toast;
 
 import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.common.viewmodel.Response;
+import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
+import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemViewModel;
 
 import javax.inject.Inject;
 
@@ -18,21 +21,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
 import timber.log.Timber;
 
-public class LobbyActivity extends LifecycleActivity {
+public class LobbyActivity extends LifecycleActivity implements HasSupportFragmentInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
 
     @Inject
     LobbyViewModelFactory viewModelFactory;
-
-    @BindView(R.id.create_shopping_list_success_textview)
-    TextView createShoppingListSuccessTextView;
-
-    @BindView(R.id.create_shopping_list_edittext)
-    EditText createShoppingListEditText;
-
-    @BindView(R.id.loading_indicator)
-    ProgressBar loadingIndicator;
 
     private LobbyViewModel viewModel;
 
@@ -46,52 +46,24 @@ public class LobbyActivity extends LifecycleActivity {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(LobbyViewModel.class);
 
-        observeLoadingStatus();
-
-        observeDataValidationStatus();
-
-        observeResponse();
+        observeLoadShoppingList();
     }
 
-    @OnClick(R.id.create_shopping_list_button)
+    @OnClick(R.id.create_shopping_list_item_button)
     void onCreateShoppingListButtonClicked() {
-        viewModel.createShoppingList(createShoppingListEditText.getText().toString());
+        Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.add_shopping_list_item_fragment_container,
+                        addShoppingListItemFragment).commit();
     }
 
-    private void observeLoadingStatus() {
-        viewModel.getLoadingStatus().observe(this, isLoading -> processLoadingStatus(isLoading));
+    private void observeLoadShoppingList() {
+        // TODO display shopping list
+        viewModel.createShoppingList();
     }
 
-    private void observeDataValidationStatus() {
-        viewModel.getDataValidationStatus().observe(this, isValid -> processDataValidationStatus(isValid));
-    }
-
-    private void observeResponse() {
-        viewModel.getResponse().observe(this, response -> processResponse(response));
-    }
-
-    private void processLoadingStatus(boolean isLoading) {
-        createShoppingListSuccessTextView.setVisibility(isLoading ? View.GONE : View.VISIBLE);
-        loadingIndicator.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-    }
-
-    private void processDataValidationStatus(boolean isValid) {
-        if (isValid) {
-            return;
-        }
-        Toast.makeText(this, R.string.create_shopping_list_validation_error, Toast.LENGTH_SHORT).show();
-    }
-
-    private void processResponse(Response<String> response) {
-        switch (response.status) {
-            case SUCCESS:
-                createShoppingListSuccessTextView.setText(R.string.create_shopping_list_success);
-                break;
-
-            case ERROR:
-                Timber.e(response.error);
-                Toast.makeText(this, R.string.create_shopping_list_error, Toast.LENGTH_SHORT).show();
-                break;
-        }
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return fragmentDispatchingAndroidInjector;
     }
 }

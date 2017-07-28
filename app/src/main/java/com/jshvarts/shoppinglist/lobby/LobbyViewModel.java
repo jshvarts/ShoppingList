@@ -11,6 +11,8 @@ import timber.log.Timber;
 
 class LobbyViewModel extends ViewModel {
 
+    private final LoadShoppingListUseCase loadShoppingListUseCase;
+
     private final CreateShoppingListUseCase createShoppingListUseCase;
 
     private final SchedulersFacade schedulersFacade;
@@ -23,8 +25,10 @@ class LobbyViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> dataValidationStatus = new MutableLiveData<>();
 
-    LobbyViewModel(CreateShoppingListUseCase createShoppingListUseCase,
+    LobbyViewModel(LoadShoppingListUseCase loadShoppingListUseCase,
+                          CreateShoppingListUseCase createShoppingListUseCase,
                           SchedulersFacade schedulersFacade) {
+        this.loadShoppingListUseCase = loadShoppingListUseCase;
         this.createShoppingListUseCase = createShoppingListUseCase;
         this.schedulersFacade = schedulersFacade;
     }
@@ -34,41 +38,14 @@ class LobbyViewModel extends ViewModel {
         disposables.clear();
     }
 
-    boolean validateShoppingListName(String shoppingListName) {
-        if (shoppingListName != null && !shoppingListName.trim().isEmpty()) {
-            Timber.d("james setting data validation value to true");
-            dataValidationStatus.setValue(true);
-        } else {
-            Timber.d("james setting data validation value to false");
-            dataValidationStatus.setValue(false);
-        }
-        return dataValidationStatus.getValue();
-    }
-
-    void createShoppingList(String shoppingListName) {
-        if (!validateShoppingListName(shoppingListName)) {
-            return;
-        }
-        disposables.add(createShoppingListUseCase.execute(shoppingListName)
+    void createShoppingList() {
+        /*
+        disposables.add(createShoppingListUseCase.execute()
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
-                .doOnSubscribe(s -> loadingStatus.setValue(true))
-                .doAfterTerminate(() -> loadingStatus.setValue(false))
-                .subscribe(() -> response.setValue(Response.success(null)),
-                        throwable -> response.setValue(Response.error(throwable))
-                )
+                .subscribe(() -> Timber.d("shopping list created"),
+                        throwable -> Timber.e(throwable))
         );
-    }
-
-    MutableLiveData<Response<String>> getResponse() {
-        return response;
-    }
-
-    MutableLiveData<Boolean> getLoadingStatus() {
-        return loadingStatus;
-    }
-
-    MutableLiveData<Boolean> getDataValidationStatus() {
-        return dataValidationStatus;
+        */
     }
 }

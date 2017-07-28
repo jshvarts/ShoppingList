@@ -1,17 +1,19 @@
 package com.jshvarts.shoppinglist.common.domain.model;
 
-import java.util.List;
+import java.util.Set;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface Repository<T> {
-    Observable<List<T>> getAll();
+    Observable<Set<T>> getItems(Specification specification);
 
-    Single<T> getById(String id);
+    Observable<T> getItem(Specification specification);
 
-    Completable save(T item);
+    Completable add(T item);
 
-    Completable delete(String id);
+    Completable update(T item);
+
+    Completable remove(Specification specification);
 }
