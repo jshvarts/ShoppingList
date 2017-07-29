@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:gravity="center"
     tools:context="com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment">
 
     <EditText
@@ -14,7 +15,7 @@
         android:hint="@string/create_shopping_list_item_name_edittext" />
 
     <Button
-        android:id="@+id/fragment_create_shopping_list_item_button"
+        android:id="@+id/save_shopping_list_item_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create_shopping_list_item_button_text" />

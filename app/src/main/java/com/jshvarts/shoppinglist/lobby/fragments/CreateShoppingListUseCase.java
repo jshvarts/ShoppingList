@@ -1,4 +1,4 @@
-package com.jshvarts.shoppinglist.lobby;
+package com.jshvarts.shoppinglist.lobby.fragments;
 
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingListItem;

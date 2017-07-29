@@ -1,6 +1,5 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
-import com.jshvarts.shoppinglist.lobby.LoadShoppingListUseCase;
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 
 import dagger.Module;

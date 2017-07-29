@@ -1,19 +1,13 @@
 package com.jshvarts.shoppinglist.lobby;
 
 import android.arch.lifecycle.LifecycleActivity;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Button;
 
 import com.jshvarts.shoppinglist.R;
-import com.jshvarts.shoppinglist.common.viewmodel.Response;
 import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
-import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemViewModel;
+import com.jshvarts.shoppinglist.lobby.fragments.ShoppingListFragment;
 
 import javax.inject.Inject;
 
@@ -24,17 +18,14 @@ import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
-import timber.log.Timber;
 
 public class LobbyActivity extends LifecycleActivity implements HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
 
-    @Inject
-    LobbyViewModelFactory viewModelFactory;
-
-    private LobbyViewModel viewModel;
+    @BindView(R.id.create_shopping_list_item_button)
+    Button addShoppingListItemButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,22 +35,16 @@ public class LobbyActivity extends LifecycleActivity implements HasSupportFragme
 
         ButterKnife.bind(this);
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(LobbyViewModel.class);
-
-        observeLoadShoppingList();
+        Fragment shoppingListFragment = new ShoppingListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.lobby_root_view, shoppingListFragment).commit();
     }
 
     @OnClick(R.id.create_shopping_list_item_button)
-    void onCreateShoppingListButtonClicked() {
+    void onAddShoppingListItemButtonClicked() {
         Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.add_shopping_list_item_fragment_container,
-                        addShoppingListItemFragment).commit();
-    }
-
-    private void observeLoadShoppingList() {
-        // TODO display shopping list
-        viewModel.createShoppingList();
+                .add(R.id.lobby_root_view, addShoppingListItemFragment).commit();
     }
 
     @Override

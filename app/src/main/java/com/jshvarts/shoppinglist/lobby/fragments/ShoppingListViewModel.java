@@ -1,15 +1,16 @@
-package com.jshvarts.shoppinglist.lobby;
+package com.jshvarts.shoppinglist.lobby.fragments;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.jshvarts.shoppinglist.common.viewmodel.Response;
+import com.jshvarts.shoppinglist.lobby.fragments.CreateShoppingListUseCase;
+import com.jshvarts.shoppinglist.lobby.fragments.LoadShoppingListUseCase;
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 
 import io.reactivex.disposables.CompositeDisposable;
-import timber.log.Timber;
 
-class LobbyViewModel extends ViewModel {
+class ShoppingListViewModel extends ViewModel {
 
     private final LoadShoppingListUseCase loadShoppingListUseCase;
 
@@ -25,7 +26,7 @@ class LobbyViewModel extends ViewModel {
 
     private final MutableLiveData<Boolean> dataValidationStatus = new MutableLiveData<>();
 
-    LobbyViewModel(LoadShoppingListUseCase loadShoppingListUseCase,
+    ShoppingListViewModel(LoadShoppingListUseCase loadShoppingListUseCase,
                           CreateShoppingListUseCase createShoppingListUseCase,
                           SchedulersFacade schedulersFacade) {
         this.loadShoppingListUseCase = loadShoppingListUseCase;
@@ -38,7 +39,7 @@ class LobbyViewModel extends ViewModel {
         disposables.clear();
     }
 
-    void createShoppingList() {
+    void addShoppingListItem() {
         /*
         disposables.add(createShoppingListUseCase.execute()
                 .subscribeOn(schedulersFacade.io())

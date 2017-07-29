@@ -1,11 +1,11 @@
-package com.jshvarts.shoppinglist.lobby;
+package com.jshvarts.shoppinglist.lobby.fragments;
 
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 
-class LobbyViewModelFactory implements ViewModelProvider.Factory {
+class ShoppingListViewModelFactory implements ViewModelProvider.Factory {
 
     private final LoadShoppingListUseCase loadShoppingListUseCase;
 
@@ -13,9 +13,9 @@ class LobbyViewModelFactory implements ViewModelProvider.Factory {
 
     private final SchedulersFacade schedulersFacade;
 
-    LobbyViewModelFactory(LoadShoppingListUseCase loadShoppingListUseCase,
-                          CreateShoppingListUseCase createShoppingListUseCase,
-                          SchedulersFacade schedulersFacade) {
+    ShoppingListViewModelFactory(LoadShoppingListUseCase loadShoppingListUseCase,
+                                 CreateShoppingListUseCase createShoppingListUseCase,
+                                 SchedulersFacade schedulersFacade) {
         this.loadShoppingListUseCase = loadShoppingListUseCase;
         this.createShoppingListUseCase = createShoppingListUseCase;
         this.schedulersFacade = schedulersFacade;
@@ -23,8 +23,8 @@ class LobbyViewModelFactory implements ViewModelProvider.Factory {
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(LobbyViewModel.class)) {
-            return (T) new LobbyViewModel(loadShoppingListUseCase, createShoppingListUseCase, schedulersFacade);
+        if (modelClass.isAssignableFrom(ShoppingListViewModel.class)) {
+            return (T) new ShoppingListViewModel(loadShoppingListUseCase, createShoppingListUseCase, schedulersFacade);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

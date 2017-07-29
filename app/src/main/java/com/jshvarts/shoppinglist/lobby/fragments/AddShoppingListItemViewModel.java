@@ -1,10 +1,10 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingListItem;
-import com.jshvarts.shoppinglist.lobby.LoadShoppingListUseCase;
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 
 import java.util.ArrayList;
@@ -22,6 +22,8 @@ public class AddShoppingListItemViewModel extends ViewModel {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
+    MutableLiveData<Boolean> hideKeyboard = new MutableLiveData<>();
+
     AddShoppingListItemViewModel(AddShoppingListItemUseCase addShoppingListItemUseCase,
                    LoadShoppingListUseCase loadShoppingListUseCase,
                    SchedulersFacade schedulersFacade) {
@@ -30,7 +32,13 @@ public class AddShoppingListItemViewModel extends ViewModel {
         this.schedulersFacade = schedulersFacade;
     }
 
+    MutableLiveData<Boolean> shouldHideKeyboard() {
+        return hideKeyboard;
+    }
+
     void addShoppingListItem(String name) {
+        hideKeyboard.setValue(true);
+
         disposables.add(loadShoppingListUseCase.execute()
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())

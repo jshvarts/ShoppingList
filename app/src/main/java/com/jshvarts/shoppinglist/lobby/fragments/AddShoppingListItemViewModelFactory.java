@@ -3,7 +3,6 @@ package com.jshvarts.shoppinglist.lobby.fragments;
 import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 
-import com.jshvarts.shoppinglist.lobby.LoadShoppingListUseCase;
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 
 class AddShoppingListItemViewModelFactory implements ViewModelProvider.Factory {

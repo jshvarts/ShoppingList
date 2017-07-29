@@ -1,13 +1,14 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
+import android.arch.lifecycle.LifecycleFragment;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.jshvarts.shoppinglist.R;
@@ -20,7 +21,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
 
-public class AddShoppingListItemFragment extends Fragment {
+public class AddShoppingListItemFragment extends LifecycleFragment {
 
     @Inject
     AddShoppingListItemViewModelFactory viewModelFactory;
@@ -50,16 +51,30 @@ public class AddShoppingListItemFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddShoppingListItemViewModel.class);
+
+        observeHideKeyboard();
     }
 
-    @OnClick(R.id.fragment_create_shopping_list_item_button)
-    void onCreateShoppingListItemButtonClicked() {
+    @OnClick(R.id.save_shopping_list_item_button)
+    void onSaveShoppingListItemButtonClicked() {
         viewModel.addShoppingListItem(addShoppingListItemButtonEditText.getText().toString());
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    void observeHideKeyboard() {
+        viewModel.shouldHideKeyboard().observe(this, hideKeyboard -> hideKeyboard(true));
+    }
+
+    private void hideKeyboard(boolean shouldHideKeyboard) {
+        if (shouldHideKeyboard) {
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+        }
     }
 }
