@@ -11,6 +11,7 @@ project.ext {
     firebaseVersion = "11.0.2"
     multiDexVersion = "1.0.1"
     guavaVersion = "20.0"
+    supportDesignVersion = "25.4.0"
 }
 
 android {
@@ -76,6 +77,9 @@ dependencies {
 
     // Guava
     compile "com.google.guava:guava:$project.guavaVersion"
+
+    // Support Design
+    compile "com.android.support:design:$project.supportDesignVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
