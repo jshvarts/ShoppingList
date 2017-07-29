@@ -1,4 +1,4 @@
-# DaggerAndroidMVVM
-Basic app that demonstrates using Dagger Android 2.10+ in MVVM app that follows Clean Architecture, RxJava
+# Shopping Cart App
 
-The source code in this repo accompanies my article https://proandroiddev.com/mvvm-architecture-using-livedata-rxjava-and-new-dagger-android-injection-639837b1eb6c 
+Shopping List app implemented using Firebase, LiveData, RxJava 2, Dagger 2.11 using Clean Architecture and Repository Design pattern.
+
