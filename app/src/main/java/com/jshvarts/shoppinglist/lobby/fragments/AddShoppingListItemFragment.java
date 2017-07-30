@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
+import timber.log.Timber;
 
 public class AddShoppingListItemFragment extends LifecycleFragment {
 
@@ -62,14 +63,12 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddShoppingListItemViewModel.class);
 
-        observeHideKeyboard();
+        observeItemAddedResult();
     }
 
     @OnClick(R.id.save_shopping_list_item_button)
     void onSaveShoppingListItemButtonClicked() {
         viewModel.addShoppingListItem(shoppingListViewModel.getCurrentShoppingList().getValue(), addShoppingListItemButtonEditText.getText().toString());
-
-        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
     @Override
@@ -78,14 +77,22 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
         unbinder.unbind();
     }
 
-    void observeHideKeyboard() {
-        viewModel.shouldHideKeyboard().observe(this, hideKeyboard -> hideKeyboard(true));
+    void detachFragment() {
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
-    private void hideKeyboard(boolean shouldHideKeyboard) {
-        if (shouldHideKeyboard) {
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-        }
+    private void observeItemAddedResult() {
+        viewModel.isItemAdded().observe(this, isSuccess -> handleItemAddedResult(isSuccess));
+    }
+
+    private void handleItemAddedResult(boolean isSuccess) {
+        Timber.d("item added result: " + isSuccess);
+        hideKeyboard();
+        detachFragment();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 }

@@ -45,12 +45,15 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
         // initialize ViewModel in Activity so that child Fragments can access it to get current shopping list
         ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
 
-        fab.setOnClickListener(v -> displayAddShoppingListItemFragment());
+        fab.setOnClickListener(v -> attachAddShoppingListItemFragment());
 
-        Fragment shoppingListFragment = new ViewShoppingListFragment();
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, shoppingListFragment)
-                .commit();
+        attachViewShoppingListFragment();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        attachViewShoppingListFragment();
     }
 
     @Override
@@ -58,8 +61,14 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
         return fragmentDispatchingAndroidInjector;
     }
 
+    private void attachViewShoppingListFragment() {
+        Fragment shoppingListFragment = new ViewShoppingListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, shoppingListFragment)
+                .commit();
+    }
 
-    private void displayAddShoppingListItemFragment() {
+    private void attachAddShoppingListItemFragment() {
         Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
         getSupportFragmentManager().beginTransaction()
                 .addToBackStack(AddShoppingListItemFragment.class.getSimpleName())
