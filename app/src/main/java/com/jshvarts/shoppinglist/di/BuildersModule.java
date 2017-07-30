@@ -1,10 +1,10 @@
 package com.jshvarts.shoppinglist.di;
 
 import com.jshvarts.shoppinglist.lobby.LobbyActivity;
+import com.jshvarts.shoppinglist.lobby.LobbyActivityModule;
 import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
 import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemModule;
-import com.jshvarts.shoppinglist.lobby.fragments.ShoppingListFragment;
-import com.jshvarts.shoppinglist.lobby.fragments.ShoppingListModule;
+import com.jshvarts.shoppinglist.lobby.fragments.ViewShoppingListFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -15,11 +15,11 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class BuildersModule {
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = LobbyActivityModule.class)
     abstract LobbyActivity bindLobbyActivity();
 
-    @ContributesAndroidInjector(modules = ShoppingListModule.class)
-    abstract ShoppingListFragment bindShoppingListFragment();
+    @ContributesAndroidInjector(modules = LobbyActivityModule.class)
+    abstract ViewShoppingListFragment bindViewShoppingListFragment();
 
     @ContributesAndroidInjector(modules = AddShoppingListItemModule.class)
     abstract AddShoppingListItemFragment bindAddShoppingListItemFragment();

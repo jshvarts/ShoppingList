@@ -1,15 +1,17 @@
-package com.jshvarts.shoppinglist.lobby.fragments;
+package com.jshvarts.shoppinglist.lobby;
 
 import com.jshvarts.shoppinglist.common.domain.model.ItemByIdSpecification;
+import com.jshvarts.shoppinglist.common.domain.model.ItemsSpecification;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingListRepository;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
 
-class LoadShoppingListUseCase {
-    private final static String SHOPPING_LIST_ID = "-KqA71srmdEerhd_B6Et";
+public class LoadShoppingListUseCase {
     private final FirebaseShoppingListRepository repository;
 
     @Inject
@@ -18,12 +20,17 @@ class LoadShoppingListUseCase {
     }
 
     /**
-     * Loads default shopping list
+     * Loads all available shopping lists, if any
      *
      * @return
      */
-    Observable<ShoppingList> execute() {
-        ItemByIdSpecification byIdSpecification = new ItemByIdSpecification(SHOPPING_LIST_ID);
+    public Observable<List<ShoppingList>> loadAvailableShoppingLists() {
+        ItemsSpecification itemsSpecification = new ItemsSpecification(1);
+        return repository.getItems(itemsSpecification);
+    }
+
+    public Observable<ShoppingList> loadCurrentShoppingList(String id) {
+        ItemByIdSpecification byIdSpecification = new ItemByIdSpecification(id);
         return repository.getItem(byIdSpecification);
     }
 }

@@ -1,6 +1,6 @@
 package com.jshvarts.shoppinglist.lobby;
 
-import android.arch.lifecycle.LifecycleActivity;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
-import com.jshvarts.shoppinglist.lobby.fragments.ShoppingListFragment;
+import com.jshvarts.shoppinglist.lobby.fragments.ViewShoppingListFragment;
 
 import javax.inject.Inject;
 
@@ -25,6 +25,9 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
 
+    @Inject
+    ShoppingListViewModelFactory viewModelFactory;
+
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
@@ -36,22 +39,31 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
 
         ButterKnife.bind(this);
 
+        // initialize ViewModel in Activity so that child Fragments can access it to get current shopping list
+        ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab.setOnClickListener(v -> {
-            Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.lobby_root_view, addShoppingListItemFragment).commit();
-        });
+        fab.setOnClickListener(v -> displayAddShoppingListItemFragment());
 
-        Fragment shoppingListFragment = new ShoppingListFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.lobby_root_view, shoppingListFragment).commit();
+        displayViewShoppingListFragment();
     }
 
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return fragmentDispatchingAndroidInjector;
+    }
+
+    private void displayAddShoppingListItemFragment() {
+        Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.lobby_root_view, addShoppingListItemFragment).commit();
+    }
+
+    private void displayViewShoppingListFragment() {
+        Fragment viewShoppingListFragment = new ViewShoppingListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.lobby_root_view, viewShoppingListFragment).commit();
     }
 }

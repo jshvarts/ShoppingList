@@ -28,9 +28,9 @@ public class StubShoppingListRepository implements Repository<ShoppingList> {
     }
 
     @Override
-    public Observable<Set<ShoppingList>> getItems(Specification specification) {
+    public Observable<List<ShoppingList>> getItems(Specification specification) {
         //ItemsSpecification itemsSpecification = (ItemsSpecification) specification;
-        return Observable.just(shoppingLists);
+        return Observable.just(new ArrayList<>(shoppingLists));
     }
 
     @Override
@@ -46,9 +46,9 @@ public class StubShoppingListRepository implements Repository<ShoppingList> {
     }
 
     @Override
-    public Completable add(ShoppingList item) {
+    public Observable<ShoppingList> add(ShoppingList item) {
         shoppingLists.add(item); // add or update given shopping list
-        return Completable.complete();
+        return Observable.just(item);
     }
 
     @Override

@@ -1,17 +1,13 @@
-package com.jshvarts.shoppinglist.lobby.fragments;
+package com.jshvarts.shoppinglist.lobby;
 
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
-import com.jshvarts.shoppinglist.common.domain.model.ShoppingListItem;
 import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingListRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
+import io.reactivex.Observable;
 
-class CreateShoppingListUseCase {
+public class CreateShoppingListUseCase {
     private final FirebaseShoppingListRepository repository;
 
     @Inject
@@ -19,7 +15,7 @@ class CreateShoppingListUseCase {
         this.repository = repository;
     }
 
-    Completable execute() {
+    Observable<ShoppingList> execute() {
         ShoppingList shoppingList = new ShoppingList();
         return repository.add(shoppingList);
     }

@@ -1,7 +1,5 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
-import com.jshvarts.shoppinglist.rx.SchedulersFacade;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -13,9 +11,7 @@ public class AddShoppingListItemModule {
 
     @Provides
     AddShoppingListItemViewModelFactory provideAddShoppingListItemViewModelFactory(
-            AddShoppingListItemUseCase addShoppingListItemUseCase,
-            LoadShoppingListUseCase loadShoppingListUseCase,
-            SchedulersFacade schedulersFacade) {
-        return new AddShoppingListItemViewModelFactory(addShoppingListItemUseCase, loadShoppingListUseCase, schedulersFacade);
+            AddShoppingListItemUseCase addShoppingListItemUseCase) {
+        return new AddShoppingListItemViewModelFactory(addShoppingListItemUseCase);
     }
 }

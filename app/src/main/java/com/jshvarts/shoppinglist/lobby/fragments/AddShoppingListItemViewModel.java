@@ -4,60 +4,22 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
-import com.jshvarts.shoppinglist.common.domain.model.ShoppingListItem;
-import com.jshvarts.shoppinglist.rx.SchedulersFacade;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.reactivex.disposables.CompositeDisposable;
-import timber.log.Timber;
 
 public class AddShoppingListItemViewModel extends ViewModel {
     private final AddShoppingListItemUseCase addShoppingListItemUseCase;
 
-    private final LoadShoppingListUseCase loadShoppingListUseCase;
-
-    private final SchedulersFacade schedulersFacade;
-
-    private final CompositeDisposable disposables = new CompositeDisposable();
-
     MutableLiveData<Boolean> hideKeyboard = new MutableLiveData<>();
 
-    AddShoppingListItemViewModel(AddShoppingListItemUseCase addShoppingListItemUseCase,
-                   LoadShoppingListUseCase loadShoppingListUseCase,
-                   SchedulersFacade schedulersFacade) {
+    AddShoppingListItemViewModel(AddShoppingListItemUseCase addShoppingListItemUseCase) {
         this.addShoppingListItemUseCase = addShoppingListItemUseCase;
-        this.loadShoppingListUseCase = loadShoppingListUseCase;
-        this.schedulersFacade = schedulersFacade;
     }
 
     MutableLiveData<Boolean> shouldHideKeyboard() {
         return hideKeyboard;
     }
 
-    void addShoppingListItem(String name) {
+    public void addShoppingListItem(ShoppingList shoppingList, String shoppingListItemName) {
         hideKeyboard.setValue(true);
-
-        disposables.add(loadShoppingListUseCase.execute()
-                .subscribeOn(schedulersFacade.io())
-                .observeOn(schedulersFacade.ui())
-                .subscribe(
-                        shoppingList -> addShoppingListItem(shoppingList, name),
-                        throwable -> Timber.e("error:" + throwable)
-                )
-        );
-    }
-
-    private void addShoppingListItem(ShoppingList shoppingList, String shoppingListItemName) {
-        ShoppingListItem shoppingListItem = new ShoppingListItem(shoppingListItemName);
-        if (shoppingList.getItems() != null && !shoppingList.getItems().isEmpty()) {
-            shoppingList.getItems().add(shoppingListItem);
-        } else {
-            List<ShoppingListItem> items = new ArrayList<>();
-            items.add(shoppingListItem);
-            shoppingList.setItems(items);
-        }
-        addShoppingListItemUseCase.execute(shoppingList);
+        addShoppingListItemUseCase.execute(shoppingList, shoppingListItemName);
     }
 }

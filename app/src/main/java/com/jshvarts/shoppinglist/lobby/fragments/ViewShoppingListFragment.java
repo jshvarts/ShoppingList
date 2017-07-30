@@ -5,27 +5,24 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.jshvarts.shoppinglist.R;
-
-import javax.inject.Inject;
+import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
+import com.jshvarts.shoppinglist.lobby.ShoppingListViewModel;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
+import timber.log.Timber;
 
-public class ShoppingListFragment extends LifecycleFragment {
-
-    @Inject
-    ShoppingListViewModelFactory viewModelFactory;
-
-    private ShoppingListViewModel viewModel;
+public class ViewShoppingListFragment extends LifecycleFragment {
 
     private Unbinder unbinder;
+
+    private ShoppingListViewModel viewModel;
 
     @Override
     public void onAttach(Context context) {
@@ -44,9 +41,11 @@ public class ShoppingListFragment extends LifecycleFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(ShoppingListViewModel.class);
 
-        observeLoadShoppingList();
+        viewModel.loadShoppingList();
+
+        observeShoppingList();
     }
 
     @Override
@@ -55,7 +54,11 @@ public class ShoppingListFragment extends LifecycleFragment {
         unbinder.unbind();
     }
 
-    private void observeLoadShoppingList() {
-        // TODO
+    private void observeShoppingList() {
+        viewModel.getCurrentShoppingList().observe(this, shoppingList -> displayShoppingList(shoppingList));
+    }
+
+    private void displayShoppingList(ShoppingList shoppingList) {
+        Timber.d("will display shopping list with id " + shoppingList.getId());
     }
 }

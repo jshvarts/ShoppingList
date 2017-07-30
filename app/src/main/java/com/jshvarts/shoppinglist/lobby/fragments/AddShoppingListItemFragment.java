@@ -12,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.jshvarts.shoppinglist.R;
+import com.jshvarts.shoppinglist.lobby.ShoppingListViewModel;
 
 import javax.inject.Inject;
 
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
+import timber.log.Timber;
 
 public class AddShoppingListItemFragment extends LifecycleFragment {
 
@@ -30,6 +32,8 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
     EditText addShoppingListItemButtonEditText;
 
     private AddShoppingListItemViewModel viewModel;
+
+    private ShoppingListViewModel shoppingListViewModel;
 
     private Unbinder unbinder;
 
@@ -50,6 +54,9 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        shoppingListViewModel = ViewModelProviders.of(getActivity()).get(ShoppingListViewModel.class);
+
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddShoppingListItemViewModel.class);
 
         observeHideKeyboard();
@@ -57,7 +64,8 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
 
     @OnClick(R.id.save_shopping_list_item_button)
     void onSaveShoppingListItemButtonClicked() {
-        viewModel.addShoppingListItem(addShoppingListItemButtonEditText.getText().toString());
+        Timber.d("james onSaveShoppingListItemButtonClicked");
+        viewModel.addShoppingListItem(shoppingListViewModel.getCurrentShoppingList().getValue(), addShoppingListItemButtonEditText.getText().toString());
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
