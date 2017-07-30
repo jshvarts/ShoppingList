@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.widget.FrameLayout;
+import android.widget.Toolbar;
 
 import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
@@ -31,6 +32,9 @@ public class LobbyActivity extends LifecycleActivity implements HasSupportFragme
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     @BindView(R.id.fragment_container)
     FrameLayout fragmentContainer;
 
@@ -43,6 +47,8 @@ public class LobbyActivity extends LifecycleActivity implements HasSupportFragme
         setContentView(R.layout.lobby_activity);
 
         ButterKnife.bind(this);
+
+        setActionBar(toolbar);
 
         // initialize ViewModel in Activity so that child Fragments can access it to get current shopping list
         shoppingListViewModel = ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
