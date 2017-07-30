@@ -80,6 +80,9 @@ dependencies {
 
     // Support Design
     compile "com.android.support:design:$project.supportDesignVersion"
+
+    // RecyclerView
+    compile "com.android.support:recyclerview-v7:$project.supportLibraryVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

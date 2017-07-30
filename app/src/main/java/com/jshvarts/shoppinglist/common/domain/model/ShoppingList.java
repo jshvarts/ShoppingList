@@ -4,6 +4,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ServerValue;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ public class ShoppingList {
 
     private String id;
     // Only List is supported by Firebase. Set would be more is more applicable though
-    private List<ShoppingListItem> items;
+    private List<ShoppingListItem> items = new ArrayList<>();
     private Long timestamp;
 
     public ShoppingList() {

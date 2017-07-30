@@ -5,6 +5,8 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +15,20 @@ import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.lobby.ShoppingListViewModel;
 
+import java.util.ArrayList;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
-import timber.log.Timber;
 
 public class ViewShoppingListFragment extends LifecycleFragment {
+
+    @BindView(R.id.shopping_list_recycler_view)
+    RecyclerView recyclerView;
+
+    private ShoppingListAdapter recyclerViewAdapter;
+    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private Unbinder unbinder;
 
@@ -35,6 +45,15 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.shopping_list_fragment, container, false);
         unbinder = ButterKnife.bind(this, view);
+
+        recyclerView.setHasFixedSize(true);
+
+        recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+
+        recyclerViewAdapter = new ShoppingListAdapter(new ArrayList<>());
+        recyclerView.setAdapter(recyclerViewAdapter);
+
         return view;
     }
 
@@ -59,6 +78,8 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     }
 
     private void displayShoppingList(ShoppingList shoppingList) {
-        Timber.d("will display shopping list with id " + shoppingList.getId());
+        if (!shoppingList.getItems().isEmpty()) {
+            recyclerViewAdapter.replaceItems(shoppingList.getItems());
+        }
     }
 }

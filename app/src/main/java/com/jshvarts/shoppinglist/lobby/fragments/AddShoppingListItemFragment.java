@@ -64,7 +64,6 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
 
     @OnClick(R.id.save_shopping_list_item_button)
     void onSaveShoppingListItemButtonClicked() {
-        Timber.d("james onSaveShoppingListItemButtonClicked");
         viewModel.addShoppingListItem(shoppingListViewModel.getCurrentShoppingList().getValue(), addShoppingListItemButtonEditText.getText().toString());
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
