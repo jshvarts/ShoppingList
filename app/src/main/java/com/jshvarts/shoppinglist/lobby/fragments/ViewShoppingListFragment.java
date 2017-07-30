@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,8 +15,11 @@ import android.view.ViewGroup;
 import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.lobby.ShoppingListViewModel;
+import com.jshvarts.shoppinglist.lobby.ShoppingListViewModelFactory;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,8 +28,14 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class ViewShoppingListFragment extends LifecycleFragment {
 
+    @Inject
+    ShoppingListViewModelFactory shoppingListViewModelFactory;
+
     @BindView(R.id.shopping_list_recycler_view)
     RecyclerView recyclerView;
+
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     private ShoppingListAdapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
@@ -60,7 +70,7 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = ViewModelProviders.of(getActivity()).get(ShoppingListViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity(), shoppingListViewModelFactory).get(ShoppingListViewModel.class);
 
         viewModel.loadShoppingList();
 

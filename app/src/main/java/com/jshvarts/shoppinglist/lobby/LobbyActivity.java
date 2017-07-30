@@ -39,15 +39,19 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
 
         ButterKnife.bind(this);
 
-        // initialize ViewModel in Activity so that child Fragments can access it to get current shopping list
-        ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // initialize ViewModel in Activity so that child Fragments can access it to get current shopping list
+        ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
+
         fab.setOnClickListener(v -> displayAddShoppingListItemFragment());
 
-        displayViewShoppingListFragment();
+        Fragment shoppingListFragment = new ViewShoppingListFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, shoppingListFragment)
+                .commit();
+
     }
 
     @Override
@@ -55,15 +59,11 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
         return fragmentDispatchingAndroidInjector;
     }
 
+
     private void displayAddShoppingListItemFragment() {
         Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.lobby_root_view, addShoppingListItemFragment).commit();
-    }
-
-    private void displayViewShoppingListFragment() {
-        Fragment viewShoppingListFragment = new ViewShoppingListFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.lobby_root_view, viewShoppingListFragment).commit();
+                .add(R.id.fragment_container, addShoppingListItemFragment)
+                .commit();
     }
 }

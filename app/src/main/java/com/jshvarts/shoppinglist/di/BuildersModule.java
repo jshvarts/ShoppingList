@@ -21,7 +21,7 @@ public abstract class BuildersModule {
     @ContributesAndroidInjector(modules = LobbyActivityModule.class)
     abstract ViewShoppingListFragment bindViewShoppingListFragment();
 
-    @ContributesAndroidInjector(modules = AddShoppingListItemModule.class)
+    @ContributesAndroidInjector(modules = {AddShoppingListItemModule.class, LobbyActivityModule.class})
     abstract AddShoppingListItemFragment bindAddShoppingListItemFragment();
 
     // Add bindings for other sub-components here
