@@ -22,7 +22,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
-import timber.log.Timber;
 
 public class AddShoppingListItemFragment extends LifecycleFragment {
 
@@ -69,6 +68,7 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
     @OnClick(R.id.save_shopping_list_item_button)
     void onSaveShoppingListItemButtonClicked() {
         viewModel.addShoppingListItem(shoppingListViewModel.getCurrentShoppingList().getValue(), addShoppingListItemButtonEditText.getText().toString());
+
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 

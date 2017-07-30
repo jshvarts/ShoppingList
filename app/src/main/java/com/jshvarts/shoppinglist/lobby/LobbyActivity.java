@@ -49,9 +49,8 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
 
         Fragment shoppingListFragment = new ViewShoppingListFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, shoppingListFragment)
+                .add(R.id.fragment_container, shoppingListFragment)
                 .commit();
-
     }
 
     @Override
@@ -63,7 +62,8 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     private void displayAddShoppingListItemFragment() {
         Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, addShoppingListItemFragment)
+                .addToBackStack(AddShoppingListItemFragment.class.getSimpleName())
+                .replace(R.id.fragment_container, addShoppingListItemFragment)
                 .commit();
     }
 }
