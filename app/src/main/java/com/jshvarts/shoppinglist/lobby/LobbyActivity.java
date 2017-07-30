@@ -1,11 +1,11 @@
 package com.jshvarts.shoppinglist.lobby;
 
+import android.arch.lifecycle.LifecycleActivity;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.widget.FrameLayout;
 
 import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
@@ -20,7 +20,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class LobbyActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class LobbyActivity extends LifecycleActivity implements HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
@@ -31,6 +31,11 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
+    @BindView(R.id.fragment_container)
+    FrameLayout fragmentContainer;
+
+    private ShoppingListViewModel shoppingListViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
@@ -39,11 +44,9 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
 
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         // initialize ViewModel in Activity so that child Fragments can access it to get current shopping list
-        ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
+        shoppingListViewModel = ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
+        shoppingListViewModel.getCurrentShoppingList().observe(this, shoppingList -> attachViewShoppingListFragment());
 
         fab.setOnClickListener(v -> attachAddShoppingListItemFragment());
 
@@ -62,10 +65,12 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     }
 
     private void attachViewShoppingListFragment() {
-        Fragment shoppingListFragment = new ViewShoppingListFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, shoppingListFragment)
-                .commit();
+        if (fragmentContainer.getChildCount() == 0) {
+            Fragment shoppingListFragment = new ViewShoppingListFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, shoppingListFragment)
+                    .commit();
+        }
     }
 
     private void attachAddShoppingListItemFragment() {

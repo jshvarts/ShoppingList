@@ -63,7 +63,7 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddShoppingListItemViewModel.class);
 
-        observeItemAddedResult();
+        observeAddItemAction();
     }
 
     @OnClick(R.id.save_shopping_list_item_button)
@@ -81,12 +81,14 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
-    private void observeItemAddedResult() {
-        viewModel.isItemAdded().observe(this, isSuccess -> handleItemAddedResult(isSuccess));
+    private void observeAddItemAction() {
+        viewModel.isItemAdded().observe(this, isSuccess -> handleAddItemAction(isSuccess));
     }
 
-    private void handleItemAddedResult(boolean isSuccess) {
+    private void handleAddItemAction(boolean isSuccess) {
         Timber.d("item added result: " + isSuccess);
+        // inform host activity (lifecycle owner) to refresh the shopping list.
+        shoppingListViewModel.loadShoppingList();
         hideKeyboard();
         detachFragment();
     }
