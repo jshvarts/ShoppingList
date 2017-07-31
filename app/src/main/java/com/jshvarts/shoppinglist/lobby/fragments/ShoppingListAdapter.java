@@ -1,5 +1,6 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ShoppingListItem shoppingListItem = shoppingListItems.get(position);
+        if (shoppingListItem.getCompleted()) {
+            holder.itemName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        }
         holder.itemName.setText(shoppingListItem.getName());
     }
 

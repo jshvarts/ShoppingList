@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,20 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
     private ShoppingListViewModel viewModel;
 
+    private ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            final int position = viewHolder.getAdapterPosition();
+            viewModel.completeShoppingListItem(position);
+        }
+    };
+
     @Override
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
@@ -63,6 +78,9 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
         recyclerViewAdapter = new ShoppingListAdapter(new ArrayList<>());
         recyclerView.setAdapter(recyclerViewAdapter);
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         return view;
     }

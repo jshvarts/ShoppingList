@@ -7,6 +7,7 @@ import java.util.Map;
 
 public class ShoppingListItem {
     private String name;
+    private boolean completed;
     private Long timestamp;
 
     public ShoppingListItem() {
@@ -23,6 +24,14 @@ public class ShoppingListItem {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public Map<String, String> getTimestamp() {

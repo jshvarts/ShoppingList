@@ -13,8 +13,9 @@ public class LobbyActivityModule {
 
     @Provides
     ShoppingListViewModelFactory provideShoppingListViewModelFactory(LoadShoppingListUseCase loadShoppingListUseCase,
-                                                       CreateShoppingListUseCase createShoppingListUseCase,
-                                                       SchedulersFacade schedulersFacade) {
-        return new ShoppingListViewModelFactory(loadShoppingListUseCase, createShoppingListUseCase, schedulersFacade);
+                                                                     CreateShoppingListUseCase createShoppingListUseCase,
+                                                                     UpdateShoppingListUseCase updateShoppingListUseCase,
+                                                                     SchedulersFacade schedulersFacade) {
+        return new ShoppingListViewModelFactory(loadShoppingListUseCase, createShoppingListUseCase, updateShoppingListUseCase, schedulersFacade);
     }
 }
