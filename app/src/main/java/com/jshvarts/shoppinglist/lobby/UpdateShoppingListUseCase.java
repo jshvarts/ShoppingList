@@ -5,7 +5,7 @@ import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingLi
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
+import io.reactivex.Single;
 
 public class UpdateShoppingListUseCase {
     private final FirebaseShoppingListRepository repository;
@@ -15,7 +15,7 @@ public class UpdateShoppingListUseCase {
         this.repository = repository;
     }
 
-    Completable updateShoppingList(ShoppingList shoppingList) {
+    Single<ShoppingList> updateShoppingList(ShoppingList shoppingList) {
         return repository.update(shoppingList);
     }
 }

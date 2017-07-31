@@ -19,6 +19,7 @@ import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import timber.log.Timber;
 
 @Singleton
@@ -92,22 +93,22 @@ public class FirebaseShoppingListRepository implements Repository<ShoppingList> 
     }
 
     @Override
-    public Observable<ShoppingList> add(ShoppingList shoppingList) {
+    public Single<ShoppingList> add(ShoppingList shoppingList) {
         DatabaseReference shoppingListRef = database.getReference().push();
         shoppingListRef.setValue(shoppingList);
         shoppingList.setId(shoppingListRef.getKey());
-        return Observable.just(shoppingList);
+        return Single.just(shoppingList);
     }
 
     @Override
-    public Completable update(ShoppingList shoppingList) {
+    public Single<ShoppingList> update(ShoppingList shoppingList) {
         DatabaseReference shoppingListRef = database.getReference().child(shoppingList.getId());
         shoppingListRef.setValue(shoppingList);
-        return Completable.complete();
+        return Single.just(shoppingList);
     }
 
     @Override
-    public Completable remove(Specification specification) {
+    public Completable removeItem(Specification specification) {
         throw new RuntimeException("Not implemented");
     }
 }

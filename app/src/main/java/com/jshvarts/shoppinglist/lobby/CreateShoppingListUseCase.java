@@ -6,6 +6,7 @@ import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingLi
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 
 public class CreateShoppingListUseCase {
     private final FirebaseShoppingListRepository repository;
@@ -15,7 +16,7 @@ public class CreateShoppingListUseCase {
         this.repository = repository;
     }
 
-    Observable<ShoppingList> execute() {
+    Single<ShoppingList> execute() {
         ShoppingList shoppingList = new ShoppingList();
         return repository.add(shoppingList);
     }

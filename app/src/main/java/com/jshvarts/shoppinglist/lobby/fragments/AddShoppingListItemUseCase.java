@@ -6,7 +6,8 @@ import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingLi
 
 import javax.inject.Inject;
 
-import io.reactivex.Completable;
+import io.reactivex.Single;
+import timber.log.Timber;
 
 public class AddShoppingListItemUseCase {
     private final FirebaseShoppingListRepository repository;
@@ -16,13 +17,28 @@ public class AddShoppingListItemUseCase {
         this.repository = repository;
     }
 
-    Completable execute(ShoppingList shoppingList, String shoppingListItemName) {
-        addShoppingListItem(shoppingList, shoppingListItemName);
+    Single<ShoppingList> execute(ShoppingList shoppingList, String shoppingListItemName) {
+        addItem(shoppingList, new ShoppingListItem(shoppingListItemName));
         return repository.update(shoppingList);
     }
 
-    private void addShoppingListItem(ShoppingList shoppingList, String shoppingListItemName) {
-        ShoppingListItem shoppingListItem = new ShoppingListItem(shoppingListItemName);
-        shoppingList.getItems().add(shoppingListItem);
+    // TODO create a helper class for this logic to comply with SOLID
+    private void addItem(ShoppingList shoppingList, ShoppingListItem item) {
+        Timber.d("james adding item");
+        int itemCount = shoppingList.getItems().size();
+        if (itemCount == 0) {
+            shoppingList.getItems().add(item);
+        } else if (shoppingList.getItems().get(itemCount - 1).getCompleted()) { // there are completed items in the list
+            // insert new non-completed item before first completed item
+            for (int i = 0; i < itemCount; i++) {
+                ShoppingListItem currentItem = shoppingList.getItems().get(i);
+                if (currentItem.getCompleted()) {
+                    shoppingList.getItems().add(i, item);
+                    break;
+                }
+            }
+        } else {
+            shoppingList.getItems().add(item);
+        }
     }
 }

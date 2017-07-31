@@ -64,7 +64,7 @@ public class ShoppingListViewModel extends ViewModel {
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
                 .subscribe(shoppingList -> {
-                            Timber.d("shopping list created id " + shoppingList.getId());
+                            Timber.d("shopping list created with id " + shoppingList.getId());
                             liveShoppingList.setValue(shoppingList);
                         },
                         throwable -> Timber.e(throwable)

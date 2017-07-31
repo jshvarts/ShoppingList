@@ -15,6 +15,7 @@ import javax.inject.Singleton;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import timber.log.Timber;
 
 @Singleton
@@ -46,19 +47,19 @@ public class StubShoppingListRepository implements Repository<ShoppingList> {
     }
 
     @Override
-    public Observable<ShoppingList> add(ShoppingList item) {
+    public Single<ShoppingList> add(ShoppingList item) {
         shoppingLists.add(item); // add or update given shopping list
-        return Observable.just(item);
+        return Single.just(item);
     }
 
     @Override
-    public Completable update(ShoppingList item) {
+    public Single<ShoppingList> update(ShoppingList item) {
         shoppingLists.add(item); // add or update given shopping list
-        return Completable.complete();
+        return Single.just(item);
     }
 
     @Override
-    public Completable remove(Specification specification) {
+    public Completable removeItem(Specification specification) {
         ItemByIdSpecification byIdSpecification = (ItemByIdSpecification) specification;
         for (ShoppingList shoppingList : shoppingLists) {
             if (shoppingList.getId().equals(byIdSpecification.getId())) {

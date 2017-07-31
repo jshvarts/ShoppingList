@@ -74,7 +74,7 @@ public class LobbyActivity extends LifecycleActivity implements HasSupportFragme
         if (fragmentContainer.getChildCount() == 0) {
             Fragment shoppingListFragment = new ViewShoppingListFragment();
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, shoppingListFragment)
+                    .replace(R.id.fragment_container, shoppingListFragment)
                     .commit();
         }
     }
