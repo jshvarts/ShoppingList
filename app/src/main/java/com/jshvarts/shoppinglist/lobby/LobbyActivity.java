@@ -1,15 +1,12 @@
 package com.jshvarts.shoppinglist.lobby;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 
 import com.jshvarts.shoppinglist.R;
-import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
 import com.jshvarts.shoppinglist.lobby.fragments.ViewShoppingListFragment;
 
 import javax.inject.Inject;
@@ -25,9 +22,6 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -45,8 +39,6 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
 
         setSupportActionBar(toolbar);
 
-        fab.setOnClickListener(v -> attachAddShoppingListItemFragment());
-
         attachViewShoppingListFragment();
     }
 
@@ -56,20 +48,9 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     }
 
     private void attachViewShoppingListFragment() {
-        if (fragmentContainer.getChildCount() == 0) {
-            Fragment shoppingListFragment = new ViewShoppingListFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, shoppingListFragment)
-                    .commit();
-        }
-    }
-
-    private void attachAddShoppingListItemFragment() {
-        Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
+        Fragment shoppingListFragment = new ViewShoppingListFragment();
         getSupportFragmentManager().beginTransaction()
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .addToBackStack(null)
-                .replace(R.id.fragment_container, addShoppingListItemFragment)
+                .replace(R.id.fragment_container, shoppingListFragment)
                 .commit();
     }
 }
