@@ -1,6 +1,8 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,8 +12,6 @@ import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingListItem;
 
 import java.util.List;
-
-import timber.log.Timber;
 
 public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapter.ViewHolder> {
 
@@ -23,15 +23,16 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
 
     @Override
     public ShoppingListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        TextView itemName = (TextView) LayoutInflater.from(parent.getContext())
+        CardView itemContainer = (CardView) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.shopping_list_item, parent, false);
-        return new ViewHolder(itemName);
+        return new ViewHolder(itemContainer);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ShoppingListItem shoppingListItem = shoppingListItems.get(position);
         if (shoppingListItem.getCompleted()) {
+            holder.itemViewContainer.setCardBackgroundColor(Color.LTGRAY);
             holder.itemName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
         holder.itemName.setText(shoppingListItem.getName());
@@ -53,11 +54,14 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView itemName;
+        CardView itemViewContainer;
 
-        public ViewHolder(final TextView itemName) {
-            super(itemName);
-            this.itemName = itemName;
+        TextView itemName;
+
+        public ViewHolder(final CardView itemViewContainer) {
+            super(itemViewContainer);
+            this.itemViewContainer = itemViewContainer;
+            this.itemName = (TextView) itemViewContainer.findViewById(R.id.shopping_list_item_name_textview);
         }
     }
 }

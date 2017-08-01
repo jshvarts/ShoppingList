@@ -81,6 +81,9 @@ dependencies {
     // Support Design
     compile "com.android.support:design:$project.supportDesignVersion"
 
+    // CardView
+    compile "com.android.support:cardview-v7:$project.supportLibraryVersion"
+
     // RecyclerView
     compile "com.android.support:recyclerview-v7:$project.supportLibraryVersion"
 }
