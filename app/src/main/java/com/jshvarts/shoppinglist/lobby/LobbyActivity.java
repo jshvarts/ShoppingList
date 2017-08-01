@@ -1,12 +1,12 @@
 package com.jshvarts.shoppinglist.lobby;
 
-import android.arch.lifecycle.LifecycleActivity;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
-import android.widget.Toolbar;
 
 import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
@@ -21,13 +21,10 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class LobbyActivity extends LifecycleActivity implements HasSupportFragmentInjector {
+public class LobbyActivity extends AppCompatActivity implements HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> fragmentDispatchingAndroidInjector;
-
-    @Inject
-    ShoppingListViewModelFactory viewModelFactory;
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -38,8 +35,6 @@ public class LobbyActivity extends LifecycleActivity implements HasSupportFragme
     @BindView(R.id.fragment_container)
     FrameLayout fragmentContainer;
 
-    private ShoppingListViewModel shoppingListViewModel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
@@ -48,20 +43,10 @@ public class LobbyActivity extends LifecycleActivity implements HasSupportFragme
 
         ButterKnife.bind(this);
 
-        setActionBar(toolbar);
-
-        // initialize ViewModel in Activity so that child Fragments can access it to get current shopping list
-        shoppingListViewModel = ViewModelProviders.of(this, viewModelFactory).get(ShoppingListViewModel.class);
-        shoppingListViewModel.getCurrentShoppingList().observe(this, shoppingList -> attachViewShoppingListFragment());
+        setSupportActionBar(toolbar);
 
         fab.setOnClickListener(v -> attachAddShoppingListItemFragment());
 
-        attachViewShoppingListFragment();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
         attachViewShoppingListFragment();
     }
 
@@ -82,7 +67,8 @@ public class LobbyActivity extends LifecycleActivity implements HasSupportFragme
     private void attachAddShoppingListItemFragment() {
         Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
         getSupportFragmentManager().beginTransaction()
-                .addToBackStack(AddShoppingListItemFragment.class.getSimpleName())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null)
                 .replace(R.id.fragment_container, addShoppingListItemFragment)
                 .commit();
     }

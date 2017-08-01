@@ -1,4 +1,4 @@
-package com.jshvarts.shoppinglist.lobby;
+package com.jshvarts.shoppinglist.lobby.fragments;
 
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 
@@ -9,13 +9,12 @@ import dagger.Provides;
  * Define LobbyActivity-specific dependencies here.
  */
 @Module
-public class LobbyActivityModule {
+public class ViewShoppingListModule {
 
     @Provides
     ShoppingListViewModelFactory provideShoppingListViewModelFactory(LoadShoppingListUseCase loadShoppingListUseCase,
-                                                                     CreateShoppingListUseCase createShoppingListUseCase,
                                                                      UpdateShoppingListUseCase updateShoppingListUseCase,
                                                                      SchedulersFacade schedulersFacade) {
-        return new ShoppingListViewModelFactory(loadShoppingListUseCase, createShoppingListUseCase, updateShoppingListUseCase, schedulersFacade);
+        return new ShoppingListViewModelFactory(loadShoppingListUseCase, updateShoppingListUseCase, schedulersFacade);
     }
 }

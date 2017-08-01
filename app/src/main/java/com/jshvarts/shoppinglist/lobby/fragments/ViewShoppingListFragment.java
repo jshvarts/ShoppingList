@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -15,8 +14,6 @@ import android.view.ViewGroup;
 
 import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
-import com.jshvarts.shoppinglist.lobby.ShoppingListViewModel;
-import com.jshvarts.shoppinglist.lobby.ShoppingListViewModelFactory;
 
 import java.util.ArrayList;
 
@@ -26,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
+import timber.log.Timber;
 
 public class ViewShoppingListFragment extends LifecycleFragment {
 
@@ -34,9 +32,6 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
     @BindView(R.id.shopping_list_recycler_view)
     RecyclerView recyclerView;
-
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
 
     private ShoppingListAdapter recyclerViewAdapter;
     private RecyclerView.LayoutManager recyclerViewLayoutManager;
@@ -82,6 +77,7 @@ public class ViewShoppingListFragment extends LifecycleFragment {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+        Timber.d("shopping list fragment onCreateView");
         return view;
     }
 
@@ -102,7 +98,7 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     }
 
     private void observeShoppingList() {
-        viewModel.getCurrentShoppingList().observe(this, shoppingList -> displayShoppingList(shoppingList));
+        viewModel.getShoppingList().observe(this, shoppingList -> displayShoppingList(shoppingList));
     }
 
     private void displayShoppingList(ShoppingList shoppingList) {

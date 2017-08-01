@@ -1,4 +1,4 @@
-package com.jshvarts.shoppinglist.lobby;
+package com.jshvarts.shoppinglist.lobby.fragments;
 
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingListRepository;
@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 
-public class CreateShoppingListUseCase {
+class CreateShoppingListUseCase {
     private final FirebaseShoppingListRepository repository;
 
     @Inject

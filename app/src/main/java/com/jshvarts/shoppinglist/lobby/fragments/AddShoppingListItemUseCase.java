@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import io.reactivex.Single;
 import timber.log.Timber;
 
-public class AddShoppingListItemUseCase {
+class AddShoppingListItemUseCase {
     private final FirebaseShoppingListRepository repository;
 
     @Inject
@@ -24,7 +24,6 @@ public class AddShoppingListItemUseCase {
 
     // TODO create a helper class for this logic to comply with SOLID
     private void addItem(ShoppingList shoppingList, ShoppingListItem item) {
-        Timber.d("james adding item");
         int itemCount = shoppingList.getItems().size();
         if (itemCount == 0) {
             shoppingList.getItems().add(item);

@@ -14,7 +14,8 @@ public class AddShoppingListItemModule {
     @Provides
     AddShoppingListItemViewModelFactory provideAddShoppingListItemViewModelFactory(
             AddShoppingListItemUseCase addShoppingListItemUseCase,
+            LoadShoppingListUseCase loadShoppingListUseCase,
             SchedulersFacade schedulersFacade) {
-        return new AddShoppingListItemViewModelFactory(addShoppingListItemUseCase, schedulersFacade);
+        return new AddShoppingListItemViewModelFactory(addShoppingListItemUseCase, loadShoppingListUseCase, schedulersFacade);
     }
 }

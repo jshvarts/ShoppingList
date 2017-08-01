@@ -12,8 +12,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.jshvarts.shoppinglist.R;
-import com.jshvarts.shoppinglist.lobby.ShoppingListViewModel;
-import com.jshvarts.shoppinglist.lobby.ShoppingListViewModelFactory;
 
 import javax.inject.Inject;
 
@@ -27,17 +25,12 @@ import timber.log.Timber;
 public class AddShoppingListItemFragment extends LifecycleFragment {
 
     @Inject
-    ShoppingListViewModelFactory shoppingListViewModelFactory;
-
-    @Inject
     AddShoppingListItemViewModelFactory viewModelFactory;
 
     @BindView(R.id.shopping_list_item_name_edittext)
     EditText addShoppingListItemButtonEditText;
 
     private AddShoppingListItemViewModel viewModel;
-
-    private ShoppingListViewModel shoppingListViewModel;
 
     private Unbinder unbinder;
 
@@ -59,16 +52,14 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        shoppingListViewModel = ViewModelProviders.of(getActivity(), shoppingListViewModelFactory).get(ShoppingListViewModel.class);
-
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddShoppingListItemViewModel.class);
 
-        observeAddItemAction();
+        observeAddItemResults();
     }
 
     @OnClick(R.id.save_shopping_list_item_button)
     void onSaveShoppingListItemButtonClicked() {
-        viewModel.addShoppingListItem(shoppingListViewModel.getCurrentShoppingList().getValue(), addShoppingListItemButtonEditText.getText().toString());
+        viewModel.addShoppingListItem(addShoppingListItemButtonEditText.getText().toString());
     }
 
     @Override
@@ -81,14 +72,12 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
-    private void observeAddItemAction() {
-        viewModel.isItemAdded().observe(this, isSuccess -> handleAddItemAction(isSuccess));
+    private void observeAddItemResults() {
+        viewModel.isItemAdded().observe(this, isSuccess -> handleAddItemResults(isSuccess));
     }
 
-    private void handleAddItemAction(boolean isSuccess) {
+    private void handleAddItemResults(boolean isSuccess) {
         Timber.d("item added result: " + isSuccess);
-        // inform host activity (lifecycle owner) to refresh the shopping list.
-        shoppingListViewModel.loadShoppingList();
         hideKeyboard();
         detachFragment();
     }
