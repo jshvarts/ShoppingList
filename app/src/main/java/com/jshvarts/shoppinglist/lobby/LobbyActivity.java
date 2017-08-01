@@ -48,9 +48,15 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     }
 
     private void attachViewShoppingListFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ViewShoppingListFragment.TAG);
+        if (fragment != null) {
+            // fragment was already recreated. likely due to orientation change
+            return;
+        }
+
         Fragment shoppingListFragment = new ViewShoppingListFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, shoppingListFragment)
+                .replace(R.id.fragment_container, shoppingListFragment, ViewShoppingListFragment.TAG)
                 .commit();
     }
 }

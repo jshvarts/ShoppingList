@@ -31,6 +31,8 @@ import timber.log.Timber;
 
 public class ViewShoppingListFragment extends LifecycleFragment {
 
+    public static final String TAG = ViewShoppingListFragment.class.getSimpleName();
+
     @Inject
     ShoppingListViewModelFactory shoppingListViewModelFactory;
 
@@ -68,12 +70,6 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     public void onAttach(Context context) {
         AndroidSupportInjection.inject(this);
         super.onAttach(context);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Timber.d("james on resume");
     }
 
     @Nullable
