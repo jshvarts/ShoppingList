@@ -120,7 +120,10 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
     private void displayShoppingList(ShoppingList shoppingList) {
         if (!shoppingList.getItems().isEmpty()) {
-            recyclerViewAdapter.replaceItems(shoppingList.getItems());
+            // TODO investigate why custom Adapter.replaceAll did not work
+            recyclerViewAdapter = new ShoppingListAdapter(shoppingList.getItems());
+            recyclerView.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter.notifyDataSetChanged();
         }
     }
 

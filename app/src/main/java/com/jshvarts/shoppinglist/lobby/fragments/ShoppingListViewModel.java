@@ -38,6 +38,11 @@ class ShoppingListViewModel extends ViewModel {
 
     void completeShoppingListItem(int index) {
         ShoppingList shoppingList = liveShoppingList.getValue();
+        if (shoppingList.getItems().get(index).getCompleted()) {
+            // item already completed. trigger UI refresh only.
+            liveShoppingList.setValue(shoppingList);
+            return;
+        }
         ShoppingListItem completedShoppingListItem = shoppingList.getItems().remove(index);
         completedShoppingListItem.setCompleted(true);
         shoppingList.getItems().add(completedShoppingListItem);
@@ -67,7 +72,7 @@ class ShoppingListViewModel extends ViewModel {
         );
     }
 
-    MutableLiveData<ShoppingList> getShoppingList() {
+    public MutableLiveData<ShoppingList> getShoppingList() {
         return liveShoppingList;
     }
 }

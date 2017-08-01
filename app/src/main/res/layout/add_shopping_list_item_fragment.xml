@@ -11,7 +11,7 @@
         android:id="@+id/shopping_list_item_name_edittext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minWidth="150dp"
+        android:minWidth="200dp"
         android:hint="@string/create_shopping_list_item_name_edittext" />
 
     <Button

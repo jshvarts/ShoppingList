@@ -32,7 +32,9 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         final ShoppingListItem shoppingListItem = shoppingListItems.get(position);
         if (shoppingListItem.getCompleted()) {
+            // TODO define style for completed items
             holder.itemViewContainer.setCardBackgroundColor(Color.LTGRAY);
+            holder.itemViewContainer.setCardElevation(2);
             holder.itemName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
         holder.itemName.setText(shoppingListItem.getName());
@@ -43,20 +45,14 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         return shoppingListItems == null ? 0 : shoppingListItems.size();
     }
 
-    public void replaceItems(List<ShoppingListItem> shoppingListItems) {
-        this.shoppingListItems.clear();
-        this.shoppingListItems.addAll(shoppingListItems);
-        notifyDataSetChanged();
-    }
-
     /**
      * View holder for shopping list items of this adapter
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        CardView itemViewContainer;
+        private CardView itemViewContainer;
 
-        TextView itemName;
+        private TextView itemName;
 
         public ViewHolder(final CardView itemViewContainer) {
             super(itemViewContainer);
