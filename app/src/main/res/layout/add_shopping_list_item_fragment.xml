@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:gravity="center"
+    android:clickable="true"
+    android:background="@color/white_opaque_color"
     tools:context="com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment">
 
     <EditText

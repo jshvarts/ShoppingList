@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,7 +76,6 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
         Timber.d("item added result: " + isSuccess);
         hideKeyboard();
         detachFragment();
-        displayShoppingListData();
     }
 
     private void hideKeyboard() {
@@ -87,9 +85,5 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
 
     private void detachFragment() {
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
-    }
-
-    private void displayShoppingListData() {
-        getActivity().findViewById(R.id.shopping_list_data_container).setVisibility(View.VISIBLE);
     }
 }
