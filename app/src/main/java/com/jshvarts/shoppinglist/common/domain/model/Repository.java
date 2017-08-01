@@ -7,7 +7,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public interface Repository<T> {
-    Observable<List<T>> getItems(Specification specification);
+    Single<List<T>> getItems(Specification specification);
 
     Observable<T> getItem(Specification specification);
 

@@ -33,10 +33,10 @@ public class FirebaseShoppingListRepository implements Repository<ShoppingList> 
     }
 
     @Override
-    public Observable<List<ShoppingList>> getItems(Specification specification) {
+    public Single<List<ShoppingList>> getItems(Specification specification) {
         ItemsSpecification itemsSpecification = (ItemsSpecification) specification;
         List<ShoppingList> shoppingLists = new ArrayList<>();
-        return Observable.create(emitter -> {
+        return Single.create(emitter -> {
             ValueEventListener valueEventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -45,10 +45,11 @@ public class FirebaseShoppingListRepository implements Repository<ShoppingList> 
                             ShoppingList shoppingList = childSnapshot.getValue(ShoppingList.class);
                             shoppingList.setId(childSnapshot.getKey());
                             shoppingLists.add(shoppingList);
-                            emitter.onNext(shoppingLists);
+                            emitter.onSuccess(shoppingLists);
                         }
+                    } else {
+                        emitter.onError(new IllegalArgumentException("Unable to find any shopping lists"));
                     }
-                    emitter.onComplete();
                 }
 
                 @Override

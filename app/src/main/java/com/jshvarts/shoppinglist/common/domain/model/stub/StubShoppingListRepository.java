@@ -29,9 +29,9 @@ public class StubShoppingListRepository implements Repository<ShoppingList> {
     }
 
     @Override
-    public Observable<List<ShoppingList>> getItems(Specification specification) {
+    public Single<List<ShoppingList>> getItems(Specification specification) {
         //ItemsSpecification itemsSpecification = (ItemsSpecification) specification;
-        return Observable.just(new ArrayList<>(shoppingLists));
+        return Single.just(new ArrayList<>(shoppingLists));
     }
 
     @Override
