@@ -12,6 +12,7 @@ project.ext {
     multiDexVersion = "1.0.1"
     guavaVersion = "20.0"
     supportDesignVersion = "25.4.0"
+    seismicVersion = "1.0.2"
 }
 
 android {
@@ -86,6 +87,9 @@ dependencies {
 
     // RecyclerView
     compile "com.android.support:recyclerview-v7:$project.supportLibraryVersion"
+
+    // Seismic, device shake detection
+    compile "com.squareup:seismic:$project.seismicVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

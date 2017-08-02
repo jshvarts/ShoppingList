@@ -2,16 +2,21 @@ package com.jshvarts.shoppinglist.lobby.fragments;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
+import android.hardware.SensorManager;
 
 import com.jshvarts.shoppinglist.common.domain.model.DatabaseConstants;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingListDataHelper;
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
+import com.squareup.seismic.ShakeDetector;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-public class DeleteCompletedItemsViewModel extends AndroidViewModel {
+public class DeleteCompletedItemsViewModel extends AndroidViewModel implements ShakeDetector.Listener {
 
     private final LoadShoppingListUseCase loadShoppingListUseCase;
 
@@ -21,7 +26,13 @@ public class DeleteCompletedItemsViewModel extends AndroidViewModel {
 
     private final ShoppingListDataHelper shoppingListDataHelper;
 
+    private final SensorManager sensorManager;
+
+    private final ShakeDetector shakeDetector;
+
     private final CompositeDisposable disposables = new CompositeDisposable();
+
+    private MutableLiveData<Boolean> completedItemsDeleted = new MutableLiveData<>();
 
     public DeleteCompletedItemsViewModel(Application application,
                                          LoadShoppingListUseCase loadShoppingListUseCase,
@@ -33,6 +44,10 @@ public class DeleteCompletedItemsViewModel extends AndroidViewModel {
         this.updateShoppingListUseCase = updateShoppingListUseCase;
         this.schedulersFacade = schedulersFacade;
         this.shoppingListDataHelper = shoppingListDataHelper;
+
+        sensorManager = (SensorManager) application.getSystemService(Context.SENSOR_SERVICE);
+        shakeDetector = new ShakeDetector(this);
+        shakeDetector.start(sensorManager);
     }
 
     @Override
@@ -40,26 +55,32 @@ public class DeleteCompletedItemsViewModel extends AndroidViewModel {
         disposables.clear();
     }
 
-    void deleteCompletedItems() {
-        loadAndDeleteShoppingList();
+    @Override
+    public void hearShake() {
+        Timber.d("deleting completed items after shake");
+        loadShoppingListAndDeleteCompletedItems();
     }
 
-    void loadAndDeleteShoppingList() {
+    LiveData<Boolean> getCompletedItemsDeleted() {
+        return completedItemsDeleted;
+    }
+
+    private void loadShoppingListAndDeleteCompletedItems() {
         disposables.add(loadShoppingListUseCase.loadShoppingList(DatabaseConstants.DEFAULT_SHOPPING_LIST_ID)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
+                .firstElement()
                 .subscribe(shoppingList -> deleteCompletedItems(shoppingList),
                         throwable -> Timber.e(throwable))
         );
     }
 
     private void deleteCompletedItems(ShoppingList shoppingList) {
-        Timber.d("deleting shoppingList items");
         shoppingListDataHelper.removeCompletedItems(shoppingList);
         disposables.add(updateShoppingListUseCase.updateShoppingList(shoppingList)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
-                .subscribe(updatedShoppingList -> Timber.d("updated shopping list."),
+                .subscribe(updatedShoppingList -> completedItemsDeleted.setValue(true),
                         throwable -> Timber.e(throwable)
                 )
         );

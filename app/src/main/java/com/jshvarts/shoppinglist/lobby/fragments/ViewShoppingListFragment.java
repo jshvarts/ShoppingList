@@ -13,6 +13,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.jshvarts.shoppinglist.R;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
@@ -89,6 +90,7 @@ public class ViewShoppingListFragment extends LifecycleFragment {
         super.onViewCreated(view, savedInstanceState);
 
         deleteCompletedItemsViewModel = ViewModelProviders.of(getActivity(), deleteCompletedItemsViewModelFactory).get(DeleteCompletedItemsViewModel.class);
+        deleteCompletedItemsViewModel.getCompletedItemsDeleted().observe(this, isSuccess -> handleCompletedItemsDeletedStatus(isSuccess));
 
         viewModel = ViewModelProviders.of(getActivity(), shoppingListViewModelFactory).get(ShoppingListViewModel.class);
         viewModel.loadShoppingList();
@@ -100,6 +102,12 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void handleCompletedItemsDeletedStatus(boolean isSuccess) {
+        if (isSuccess) {
+            Toast.makeText(getActivity(), R.string.deleted_completed_items_success_text, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void displayShoppingList(ShoppingList shoppingList) {
