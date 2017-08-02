@@ -57,7 +57,6 @@ public class DeleteCompletedItemsViewModel extends AndroidViewModel implements S
 
     @Override
     public void hearShake() {
-        Timber.d("deleting completed items after shake");
         loadShoppingListAndDeleteCompletedItems();
     }
 
@@ -76,12 +75,21 @@ public class DeleteCompletedItemsViewModel extends AndroidViewModel implements S
     }
 
     private void deleteCompletedItems(ShoppingList shoppingList) {
+        int itemCount = shoppingList.getItems().size();
+        if (itemCount == 0 || !shoppingList.getItems().get(itemCount - 1).getCompleted()) {
+            // no completed items
+            return;
+        }
+        Timber.d("deleting completed items after shake");
         shoppingListDataHelper.removeCompletedItems(shoppingList);
         disposables.add(updateShoppingListUseCase.updateShoppingList(shoppingList)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
-                .subscribe(updatedShoppingList -> completedItemsDeleted.setValue(true),
-                        throwable -> Timber.e(throwable)
+                .subscribe(updatedShoppingList -> {
+                        // TODO use custom SingleLiveEvent instead of resetting the value
+                        completedItemsDeleted.setValue(true);
+                        completedItemsDeleted.setValue(false);
+                    }, throwable -> Timber.e(throwable)
                 )
         );
     }

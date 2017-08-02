@@ -48,8 +48,7 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     }
 
     private void attachViewShoppingListFragment() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ViewShoppingListFragment.TAG);
-        if (fragment != null) {
+        if (isViewShoppingListFragmentAttached()) {
             // fragment was already recreated. likely due to orientation change
             return;
         }
@@ -59,5 +58,9 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
                 .add(R.id.fragment_container, shoppingListFragment, ViewShoppingListFragment.TAG)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private boolean isViewShoppingListFragmentAttached() {
+        return getSupportFragmentManager().findFragmentByTag(ViewShoppingListFragment.TAG) != null;
     }
 }
