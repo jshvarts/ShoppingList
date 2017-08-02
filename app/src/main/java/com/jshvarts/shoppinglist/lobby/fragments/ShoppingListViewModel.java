@@ -1,5 +1,6 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
@@ -36,6 +37,19 @@ class ShoppingListViewModel extends ViewModel {
         disposables.clear();
     }
 
+    LiveData<ShoppingList> getShoppingList() {
+        return liveShoppingList;
+    }
+
+    void loadShoppingList() {
+        disposables.add(loadShoppingListUseCase.loadShoppingList(DatabaseConstants.DEFAULT_SHOPPING_LIST_ID)
+                .subscribeOn(schedulersFacade.io())
+                .observeOn(schedulersFacade.ui())
+                .subscribe(shoppingList -> liveShoppingList.setValue(shoppingList),
+                        throwable -> Timber.e(throwable))
+        );
+    }
+
     void completeShoppingListItem(int index) {
         ShoppingList shoppingList = liveShoppingList.getValue();
         if (shoppingList.getItems().get(index).getCompleted()) {
@@ -50,29 +64,13 @@ class ShoppingListViewModel extends ViewModel {
         updateShoppingList(shoppingList);
     }
 
-    void loadShoppingList() {
-        disposables.add(loadShoppingListUseCase.loadShoppingList(DatabaseConstants.DEFAULT_SHOPPING_LIST_ID)
-                .subscribeOn(schedulersFacade.io())
-                .observeOn(schedulersFacade.ui())
-                .subscribe(shoppingList -> liveShoppingList.setValue(shoppingList),
-                        throwable -> Timber.e(throwable))
-        );
-    }
-
     private void updateShoppingList(ShoppingList shoppingList) {
         disposables.add(updateShoppingListUseCase.updateShoppingList(shoppingList)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
-                .subscribe(updatedShoppingList -> {
-                            Timber.d("shopping list with id updated: " + shoppingList.getId());
-                            liveShoppingList.setValue(updatedShoppingList);
-                        },
+                .subscribe(updatedShoppingList -> liveShoppingList.setValue(updatedShoppingList),
                         throwable -> Timber.e(throwable)
                 )
         );
-    }
-
-    public MutableLiveData<ShoppingList> getShoppingList() {
-        return liveShoppingList;
     }
 }

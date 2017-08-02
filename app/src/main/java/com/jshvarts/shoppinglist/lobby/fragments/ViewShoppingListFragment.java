@@ -25,7 +25,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
-import timber.log.Timber;
 
 public class ViewShoppingListFragment extends LifecycleFragment {
 
@@ -41,13 +40,13 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     FloatingActionButton fab;
 
     private ShoppingListAdapter recyclerViewAdapter;
-    private RecyclerView.LayoutManager recyclerViewLayoutManager;
 
     private Unbinder unbinder;
 
     private ShoppingListViewModel viewModel;
 
-    private ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+    private ItemTouchHelper.SimpleCallback simpleCallback
+            = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -75,18 +74,8 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
         fab.setOnClickListener(v -> attachAddShoppingListItemFragment());
 
-        recyclerView.setHasFixedSize(true);
+        initRecyclerView();
 
-        recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(recyclerViewLayoutManager);
-
-        recyclerViewAdapter = new ShoppingListAdapter(new ArrayList<>());
-        recyclerView.setAdapter(recyclerViewAdapter);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-
-        Timber.d("shopping list fragment onCreateView");
         return view;
     }
 
@@ -97,7 +86,7 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
         viewModel.loadShoppingList();
 
-        observeShoppingList();
+        viewModel.getShoppingList().observe(this, shoppingList -> displayShoppingList(shoppingList));
     }
 
     @Override
@@ -106,17 +95,11 @@ public class ViewShoppingListFragment extends LifecycleFragment {
         unbinder.unbind();
     }
 
-    private void observeShoppingList() {
-        viewModel.getShoppingList().observe(this, shoppingList -> displayShoppingList(shoppingList));
-    }
-
     private void displayShoppingList(ShoppingList shoppingList) {
-        if (!shoppingList.getItems().isEmpty()) {
-            // TODO investigate why custom Adapter.replaceAll did not work
-            recyclerViewAdapter = new ShoppingListAdapter(shoppingList.getItems());
-            recyclerView.setAdapter(recyclerViewAdapter);
-            recyclerViewAdapter.notifyDataSetChanged();
-        }
+        // investigate clearing and invalidating adapter instead
+        recyclerViewAdapter = new ShoppingListAdapter(shoppingList.getItems());
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.notifyDataSetChanged();
     }
 
     private void attachAddShoppingListItemFragment() {
@@ -125,5 +108,17 @@ public class ViewShoppingListFragment extends LifecycleFragment {
                 .addToBackStack(null)
                 .add(R.id.shopping_list_fragment_root_view, addShoppingListItemFragment)
                 .commit();
+    }
+
+    private void initRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+
+        recyclerViewAdapter = new ShoppingListAdapter(new ArrayList<>());
+        recyclerView.setAdapter(recyclerViewAdapter);
+
+        new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
     }
 }

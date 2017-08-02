@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import dagger.android.support.AndroidSupportInjection;
-import timber.log.Timber;
 
 public class AddShoppingListItemFragment extends LifecycleFragment {
 
@@ -54,7 +53,10 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddShoppingListItemViewModel.class);
 
-        observeAddItemResults();
+        viewModel.isItemAdded().observe(this, success -> {
+            hideKeyboard();
+            detachFragment();
+        });
     }
 
     @OnClick(R.id.save_shopping_list_item_button)
@@ -66,16 +68,6 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    private void observeAddItemResults() {
-        viewModel.isItemAdded().observe(this, isSuccess -> handleAddItemResults(isSuccess));
-    }
-
-    private void handleAddItemResults(boolean isSuccess) {
-        Timber.d("item added result: " + isSuccess);
-        hideKeyboard();
-        detachFragment();
     }
 
     private void hideKeyboard() {

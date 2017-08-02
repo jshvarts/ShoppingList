@@ -1,5 +1,6 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
@@ -30,6 +31,10 @@ class AddShoppingListItemViewModel extends ViewModel {
         this.schedulersFacade = schedulersFacade;
     }
 
+    LiveData<Boolean> isItemAdded() {
+        return shoppingListItemAdded;
+    }
+
     void addShoppingListItem(String shoppingListItemName) {
         loadShoppingListAndAddItem(shoppingListItemName);
     }
@@ -48,15 +53,8 @@ class AddShoppingListItemViewModel extends ViewModel {
         disposables.add(addShoppingListItemUseCase.execute(shoppingList, shoppingListItemName)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
-                .subscribe(updatedShoppingList -> {
-                            Timber.d("updated shopping list with id " + updatedShoppingList.getId());
-                            shoppingListItemAdded.setValue(true);
-                        }, throwable -> Timber.e(throwable)
-                )
+                .subscribe(updatedShoppingList -> shoppingListItemAdded.setValue(true),
+                        throwable -> Timber.e(throwable))
         );
-    }
-
-    MutableLiveData<Boolean> isItemAdded() {
-        return shoppingListItemAdded;
     }
 }

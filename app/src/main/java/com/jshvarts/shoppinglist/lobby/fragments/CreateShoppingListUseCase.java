@@ -5,7 +5,6 @@ import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingLi
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 
 class CreateShoppingListUseCase {
