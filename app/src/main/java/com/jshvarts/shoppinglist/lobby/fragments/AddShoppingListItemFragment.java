@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jshvarts.shoppinglist.R;
 
@@ -55,10 +56,7 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddShoppingListItemViewModel.class);
 
-        viewModel.isItemAdded().observe(this, success -> {
-            hideKeyboard();
-            detachFragment();
-        });
+        viewModel.isItemAdded().observe(this, isSuccess -> handleIsItemAddedResponse(isSuccess));
     }
 
     @OnClick(R.id.save_shopping_list_item_button)
@@ -70,6 +68,15 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    private void handleIsItemAddedResponse(boolean isSuccess) {
+        if (isSuccess) {
+            detachFragment();
+        } else {
+            Toast.makeText(getActivity(), R.string.create_shopping_list_item_validation_error, Toast.LENGTH_SHORT).show();
+        }
+        hideKeyboard();
     }
 
     private void hideKeyboard() {

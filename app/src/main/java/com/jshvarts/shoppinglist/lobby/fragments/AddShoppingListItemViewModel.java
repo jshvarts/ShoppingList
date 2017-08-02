@@ -4,8 +4,10 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
+import com.google.common.base.Strings;
 import com.jshvarts.shoppinglist.common.domain.model.DatabaseConstants;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
+import com.jshvarts.shoppinglist.common.viewmodel.SingleLiveEvent;
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -21,7 +23,7 @@ class AddShoppingListItemViewModel extends ViewModel {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    private MutableLiveData<Boolean> shoppingListItemAdded = new MutableLiveData<>();
+    private MutableLiveData<Boolean> shoppingListItemAdded = new SingleLiveEvent<>();
 
     AddShoppingListItemViewModel(AddShoppingListItemUseCase addShoppingListItemUseCase,
                                  LoadShoppingListUseCase loadShoppingListUseCase,
@@ -36,6 +38,10 @@ class AddShoppingListItemViewModel extends ViewModel {
     }
 
     void addShoppingListItem(String shoppingListItemName) {
+        if (Strings.isNullOrEmpty(shoppingListItemName)) {
+            shoppingListItemAdded.setValue(false);
+            return;
+        }
         loadShoppingListAndAddItem(shoppingListItemName);
     }
 

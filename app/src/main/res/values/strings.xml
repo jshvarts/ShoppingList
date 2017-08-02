@@ -2,7 +2,7 @@
     <string name="app_name">Shopping List</string>
     <string name="create_shopping_list_item_name_edittext">item name</string>
     <string name="create_shopping_list_item_button_text">Add</string>
-    <string name="create_shopping_list_item_validation_error">Shopping list item name is required.</string>
+    <string name="create_shopping_list_item_validation_error">Invalid item name.</string>
     <string name="create_shopping_list_item_error">Unable to add shopping list item.</string>
     <string name="deleted_completed_items_success_text">Deleted completed items.</string>
 </resources>

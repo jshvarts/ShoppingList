@@ -10,6 +10,7 @@ import android.hardware.SensorManager;
 import com.jshvarts.shoppinglist.common.domain.model.DatabaseConstants;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingListDataHelper;
+import com.jshvarts.shoppinglist.common.viewmodel.SingleLiveEvent;
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 import com.squareup.seismic.ShakeDetector;
 
@@ -32,7 +33,7 @@ public class DeleteCompletedItemsViewModel extends AndroidViewModel implements S
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    private MutableLiveData<Boolean> completedItemsDeleted = new MutableLiveData<>();
+    private MutableLiveData<Boolean> completedItemsDeleted = new SingleLiveEvent<>();
 
     public DeleteCompletedItemsViewModel(Application application,
                                          LoadShoppingListUseCase loadShoppingListUseCase,
@@ -86,9 +87,7 @@ public class DeleteCompletedItemsViewModel extends AndroidViewModel implements S
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
                 .subscribe(updatedShoppingList -> {
-                        // TODO use custom SingleLiveEvent instead of resetting the value
                         completedItemsDeleted.setValue(true);
-                        completedItemsDeleted.setValue(false);
                     }, throwable -> Timber.e(throwable)
                 )
         );
