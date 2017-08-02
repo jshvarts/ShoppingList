@@ -3,6 +3,7 @@ package com.jshvarts.shoppinglist.di;
 import android.content.Context;
 
 import com.jshvarts.shoppinglist.App;
+import com.jshvarts.shoppinglist.common.domain.model.ShoppingListDataHelper;
 import com.jshvarts.shoppinglist.common.domain.model.firebase.FirebaseShoppingListRepository;
 
 import javax.inject.Singleton;
@@ -25,5 +26,11 @@ public class AppModule {
     @Provides
     FirebaseShoppingListRepository provideFirebaseShoppingListRepository() {
         return new FirebaseShoppingListRepository();
+    }
+
+    @Singleton
+    @Provides
+    ShoppingListDataHelper provideShoppingListDataHelper() {
+        return new ShoppingListDataHelper();
     }
 }

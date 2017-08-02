@@ -6,7 +6,7 @@ import android.arch.lifecycle.ViewModel;
 
 import com.jshvarts.shoppinglist.common.domain.model.DatabaseConstants;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
-import com.jshvarts.shoppinglist.common.domain.model.ShoppingListItem;
+import com.jshvarts.shoppinglist.common.domain.model.ShoppingListDataHelper;
 import com.jshvarts.shoppinglist.rx.SchedulersFacade;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -20,16 +20,20 @@ class ShoppingListViewModel extends ViewModel {
 
     private final SchedulersFacade schedulersFacade;
 
+    private final ShoppingListDataHelper shoppingListDataHelper;
+
     private final CompositeDisposable disposables = new CompositeDisposable();
 
     private MutableLiveData<ShoppingList> liveShoppingList = new MutableLiveData<>();
 
     ShoppingListViewModel(LoadShoppingListUseCase loadShoppingListUseCase,
                           UpdateShoppingListUseCase updateShoppingListUseCase,
-                          SchedulersFacade schedulersFacade) {
+                          SchedulersFacade schedulersFacade,
+                          ShoppingListDataHelper shoppingListDataHelper) {
         this.loadShoppingListUseCase = loadShoppingListUseCase;
         this.updateShoppingListUseCase = updateShoppingListUseCase;
         this.schedulersFacade = schedulersFacade;
+        this.shoppingListDataHelper = shoppingListDataHelper;
     }
 
     @Override
@@ -50,21 +54,15 @@ class ShoppingListViewModel extends ViewModel {
         );
     }
 
-    void completeShoppingListItem(int index) {
+    void completeShoppingListItem(int itemIndex) {
         ShoppingList shoppingList = liveShoppingList.getValue();
-        if (shoppingList.getItems().get(index).getCompleted()) {
+        if (shoppingList.getItems().get(itemIndex).getCompleted()) {
             // item already completed. trigger UI refresh only.
             liveShoppingList.setValue(shoppingList);
             return;
         }
-        ShoppingListItem completedShoppingListItem = shoppingList.getItems().remove(index);
-        completedShoppingListItem.setCompleted(true);
-        shoppingList.getItems().add(completedShoppingListItem);
+        shoppingListDataHelper.completeItem(shoppingList, itemIndex);
 
-        updateShoppingList(shoppingList);
-    }
-
-    private void updateShoppingList(ShoppingList shoppingList) {
         disposables.add(updateShoppingListUseCase.updateShoppingList(shoppingList)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
