@@ -43,4 +43,16 @@ public class ShoppingListDataHelper {
             shoppingList.getItems().add(item);
         }
     }
+
+    public void removeCompletedItems(final ShoppingList shoppingList) {
+        int itemCount = shoppingList.getItems().size();
+        for (int i = itemCount - 1; i >= 0; i--) {
+            ShoppingListItem item = shoppingList.getItems().get(i);
+            if (item.getCompleted()) {
+                shoppingList.getItems().remove(item);
+            } else {
+                break;
+            }
+        }
+    }
 }

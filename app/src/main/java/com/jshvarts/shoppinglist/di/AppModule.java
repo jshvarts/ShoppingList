@@ -1,5 +1,6 @@
 package com.jshvarts.shoppinglist.di;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.jshvarts.shoppinglist.App;
@@ -20,6 +21,11 @@ public class AppModule {
     @Provides
     Context provideContext(App application) {
         return application.getApplicationContext();
+    }
+
+    @Provides
+    Application provideApplication(App application) {
+        return application;
     }
 
     @Singleton

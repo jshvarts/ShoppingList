@@ -31,6 +31,9 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     public static final String TAG = ViewShoppingListFragment.class.getSimpleName();
 
     @Inject
+    DeleteCompletedItemsViewModelFactory deleteCompletedItemsViewModelFactory;
+
+    @Inject
     ShoppingListViewModelFactory shoppingListViewModelFactory;
 
     @BindView(R.id.shopping_list_recycler_view)
@@ -42,6 +45,8 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     private ShoppingListAdapter recyclerViewAdapter;
 
     private Unbinder unbinder;
+
+    private DeleteCompletedItemsViewModel deleteCompletedItemsViewModel;
 
     private ShoppingListViewModel viewModel;
 
@@ -82,8 +87,10 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = ViewModelProviders.of(getActivity(), shoppingListViewModelFactory).get(ShoppingListViewModel.class);
 
+        deleteCompletedItemsViewModel = ViewModelProviders.of(getActivity(), deleteCompletedItemsViewModelFactory).get(DeleteCompletedItemsViewModel.class);
+
+        viewModel = ViewModelProviders.of(getActivity(), shoppingListViewModelFactory).get(ShoppingListViewModel.class);
         viewModel.loadShoppingList();
 
         viewModel.getShoppingList().observe(this, shoppingList -> displayShoppingList(shoppingList));
