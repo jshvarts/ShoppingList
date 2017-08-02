@@ -120,8 +120,8 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     private void attachAddShoppingListItemFragment() {
         Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
         getChildFragmentManager().beginTransaction()
-                .addToBackStack(null)
-                .add(R.id.shopping_list_fragment_root_view, addShoppingListItemFragment)
+                .addToBackStack(AddShoppingListItemFragment.TAG)
+                .add(R.id.shopping_list_fragment_root_view, addShoppingListItemFragment, AddShoppingListItemFragment.TAG)
                 .commit();
     }
 

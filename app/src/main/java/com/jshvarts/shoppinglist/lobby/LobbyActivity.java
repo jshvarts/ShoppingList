@@ -2,11 +2,13 @@ package com.jshvarts.shoppinglist.lobby;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 
 import com.jshvarts.shoppinglist.R;
+import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
 import com.jshvarts.shoppinglist.lobby.fragments.ViewShoppingListFragment;
 
 import javax.inject.Inject;
@@ -43,6 +45,19 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     }
 
     @Override
+    public void onBackPressed() {
+        Fragment shoppingListFragment = getSupportFragmentManager().findFragmentByTag(ViewShoppingListFragment.TAG);
+        Fragment addToShoppingListFragment = shoppingListFragment.getChildFragmentManager().findFragmentByTag(AddShoppingListItemFragment.TAG);
+
+        if (addToShoppingListFragment != null) {
+            shoppingListFragment.getChildFragmentManager().popBackStack(AddShoppingListItemFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else {
+            getSupportFragmentManager().popBackStack(ViewShoppingListFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return fragmentDispatchingAndroidInjector;
     }
@@ -56,7 +71,7 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
         Fragment shoppingListFragment = new ViewShoppingListFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, shoppingListFragment, ViewShoppingListFragment.TAG)
-                .addToBackStack(null)
+                .addToBackStack(ViewShoppingListFragment.TAG)
                 .commit();
     }
 

@@ -23,6 +23,8 @@ import dagger.android.support.AndroidSupportInjection;
 
 public class AddShoppingListItemFragment extends LifecycleFragment {
 
+    public static final String TAG = AddShoppingListItemFragment.class.getSimpleName();
+
     @Inject
     AddShoppingListItemViewModelFactory viewModelFactory;
 
