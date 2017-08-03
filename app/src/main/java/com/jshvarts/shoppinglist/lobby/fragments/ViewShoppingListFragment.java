@@ -32,6 +32,8 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
     public static final String TAG = ViewShoppingListFragment.class.getSimpleName();
 
+    private static final int FAB_REDISPLAY_DELAY_MILLIS = 300;
+
     @Inject
     DeleteCompletedItemsViewModelFactory deleteCompletedItemsViewModelFactory;
 
@@ -54,9 +56,9 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
     private FragmentManager.OnBackStackChangedListener backStackChangedListener = () -> {
         if (getChildFragmentManager().getBackStackEntryCount() > 0) {
-            fab.setVisibility(View.GONE);
+            fab.hide();
         } else {
-            fab.setVisibility(View.VISIBLE);
+            showFabWithDelay();
         }
     };
 
@@ -104,7 +106,10 @@ public class ViewShoppingListFragment extends LifecycleFragment {
         viewModel = ViewModelProviders.of(getActivity(), shoppingListViewModelFactory).get(ShoppingListViewModel.class);
         viewModel.loadShoppingList();
 
-        viewModel.getShoppingList().observe(this, shoppingList -> displayShoppingList(shoppingList));
+        viewModel.getShoppingList().observe(this, shoppingList -> {
+            displayShoppingList(shoppingList);
+            fab.show();
+        });
 
         getChildFragmentManager().addOnBackStackChangedListener(backStackChangedListener);
     }
@@ -129,6 +134,7 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     }
 
     private void attachAddShoppingListItemFragment() {
+        fab.hide();
         Fragment addShoppingListItemFragment = new AddShoppingListItemFragment();
         getChildFragmentManager().beginTransaction()
                 .addToBackStack(AddShoppingListItemFragment.TAG)
@@ -146,5 +152,9 @@ public class ViewShoppingListFragment extends LifecycleFragment {
         recyclerView.setAdapter(recyclerViewAdapter);
 
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
+    }
+
+    private void showFabWithDelay() {
+        fab.getHandler().postDelayed(() -> fab.show(), FAB_REDISPLAY_DELAY_MILLIS);
     }
 }

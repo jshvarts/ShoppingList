@@ -71,12 +71,12 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
     }
 
     private void handleIsItemAddedResponse(boolean isSuccess) {
+        hideKeyboard();
         if (isSuccess) {
             detachFragment();
         } else {
             Toast.makeText(getActivity(), R.string.create_shopping_list_item_validation_error, Toast.LENGTH_SHORT).show();
         }
-        hideKeyboard();
     }
 
     private void hideKeyboard() {
