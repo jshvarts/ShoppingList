@@ -2,7 +2,6 @@ package com.jshvarts.shoppinglist.lobby;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
@@ -48,12 +47,10 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     public void onBackPressed() {
         Fragment shoppingListFragment = getSupportFragmentManager().findFragmentByTag(ViewShoppingListFragment.TAG);
         Fragment addToShoppingListFragment = shoppingListFragment.getChildFragmentManager().findFragmentByTag(AddShoppingListItemFragment.TAG);
-
         if (addToShoppingListFragment != null) {
-            shoppingListFragment.getChildFragmentManager().popBackStack(AddShoppingListItemFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            shoppingListFragment.getChildFragmentManager().popBackStack();
         } else {
-            getSupportFragmentManager().popBackStack(ViewShoppingListFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            super.onBackPressed();
+            finish();
         }
     }
 

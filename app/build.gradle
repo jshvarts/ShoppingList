@@ -8,7 +8,7 @@ project.ext {
     rxAndroidVersion = "2.0.1"
     timberVersion = "4.5.1"
     lifecycleVersion = "1.0.0-alpha3"
-    firebaseVersion = "11.0.2"
+    firebaseVersion="11.0.2"
     multiDexVersion = "1.0.1"
     guavaVersion = "20.0"
     supportDesignVersion = "25.4.0"
@@ -75,6 +75,10 @@ dependencies {
 
     // Firebase
     implementation "com.google.firebase:firebase-database:$project.firebaseVersion"
+
+    //Firebase Auth with Google acct
+    compile "com.google.firebase:firebase-auth:$project.firebaseVersion"
+    compile "com.google.android.gms:play-services-auth:$project.firebaseVersion"
 
     // Guava
     compile "com.google.guava:guava:$project.guavaVersion"

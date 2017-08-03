@@ -34,7 +34,6 @@ public class ShoppingListAdapter extends RecyclerView.Adapter<ShoppingListAdapte
         if (shoppingListItem.getCompleted()) {
             // TODO define style for completed items
             holder.itemViewContainer.setCardBackgroundColor(Color.LTGRAY);
-            holder.itemViewContainer.setCardElevation(2);
             holder.itemName.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
         }
         holder.itemName.setText(shoppingListItem.getName());

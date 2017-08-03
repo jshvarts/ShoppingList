@@ -86,5 +86,6 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
 
     private void detachFragment() {
         getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
+        getParentFragment().getChildFragmentManager().popBackStack();
     }
 }
