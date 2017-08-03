@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -50,6 +51,14 @@ public class ViewShoppingListFragment extends LifecycleFragment {
     private DeleteCompletedItemsViewModel deleteCompletedItemsViewModel;
 
     private ShoppingListViewModel viewModel;
+
+    private FragmentManager.OnBackStackChangedListener backStackChangedListener = () -> {
+        if (getChildFragmentManager().getBackStackEntryCount() > 0) {
+            fab.setVisibility(View.GONE);
+        } else {
+            fab.setVisibility(View.VISIBLE);
+        }
+    };
 
     private ItemTouchHelper.SimpleCallback simpleCallback
             = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -96,6 +105,8 @@ public class ViewShoppingListFragment extends LifecycleFragment {
         viewModel.loadShoppingList();
 
         viewModel.getShoppingList().observe(this, shoppingList -> displayShoppingList(shoppingList));
+
+        getChildFragmentManager().addOnBackStackChangedListener(backStackChangedListener);
     }
 
     @Override
