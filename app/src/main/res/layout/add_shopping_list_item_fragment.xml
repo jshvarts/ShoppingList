@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center"
     android:clickable="true"
     android:background="@color/white_opaque_color"
     tools:context="com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment">
 
-    <EditText
-        android:id="@+id/shopping_list_item_name_edittext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="200dp"
-        android:hint="@string/create_shopping_list_item_name_edittext" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
 
-    <Button
-        android:id="@+id/save_shopping_list_item_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/create_shopping_list_item_button_text" />
+        <EditText
+            android:id="@+id/shopping_list_item_name_edittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".8"
+            android:hint="@string/create_shopping_list_item_name_edittext" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/save_shopping_list_item_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".2"
+            android:text="@string/create_shopping_list_item_button_text" />
+
+    </LinearLayout>
+
+</FrameLayout>
