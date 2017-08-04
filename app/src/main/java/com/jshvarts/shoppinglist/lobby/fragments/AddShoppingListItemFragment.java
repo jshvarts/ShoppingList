@@ -55,8 +55,13 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AddShoppingListItemViewModel.class);
-        viewModel.isItemValid().observe(this, isValid -> handleIsItemValidResponse(isValid));
-        viewModel.isItemAdded().observe(this, isSuccess -> handleIsItemAddedResponse(isSuccess));
+
+        viewModel.hideKeyboard().observe(this, response -> hideKeyboard());
+
+        viewModel.itemInvalid().observe(this, response ->
+                Toast.makeText(getActivity(), R.string.create_shopping_list_item_validation_error, Toast.LENGTH_SHORT).show());
+
+        viewModel.itemAdded().observe(this, isSuccess -> handleIsItemAddedResponse(isSuccess));
     }
 
     @OnClick(R.id.save_shopping_list_item_button)
@@ -68,13 +73,6 @@ public class AddShoppingListItemFragment extends LifecycleFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-    }
-
-    private void handleIsItemValidResponse(boolean isValid) {
-        hideKeyboard();
-        if (!isValid) {
-            Toast.makeText(getActivity(), R.string.create_shopping_list_item_validation_error, Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void handleIsItemAddedResponse(boolean isSuccess) {

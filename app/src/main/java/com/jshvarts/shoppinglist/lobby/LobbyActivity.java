@@ -50,9 +50,9 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
         Fragment shoppingListFragment = getSupportFragmentManager().findFragmentByTag(ViewShoppingListFragment.TAG);
         if (shoppingListFragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
             shoppingListFragment.getChildFragmentManager().popBackStack();
-        } else {
-            finish();
+            return;
         }
+        finish();
     }
 
     @Override

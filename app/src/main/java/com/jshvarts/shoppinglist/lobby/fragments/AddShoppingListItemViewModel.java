@@ -1,7 +1,5 @@
 package com.jshvarts.shoppinglist.lobby.fragments;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.google.common.base.Strings;
@@ -23,9 +21,11 @@ class AddShoppingListItemViewModel extends ViewModel {
 
     private final CompositeDisposable disposables = new CompositeDisposable();
 
-    private MutableLiveData<Boolean> shoppingListItemAdded = new SingleLiveEvent<>();
+    private SingleLiveEvent<Boolean> itemAdded = new SingleLiveEvent<>();
 
-    private MutableLiveData<Boolean> shoppingListItemValid = new SingleLiveEvent<>();
+    private SingleLiveEvent<Void> itemInvalid = new SingleLiveEvent<>();
+
+    private SingleLiveEvent<Void> hideKeyboard = new SingleLiveEvent<>();
 
     AddShoppingListItemViewModel(AddShoppingListItemUseCase addShoppingListItemUseCase,
                                  LoadShoppingListUseCase loadShoppingListUseCase,
@@ -35,20 +35,25 @@ class AddShoppingListItemViewModel extends ViewModel {
         this.schedulersFacade = schedulersFacade;
     }
 
-    LiveData<Boolean> isItemAdded() {
-        return shoppingListItemAdded;
+    SingleLiveEvent<Boolean> itemAdded() {
+        return itemAdded;
     }
 
-    LiveData<Boolean> isItemValid() {
-        return shoppingListItemValid;
+    SingleLiveEvent<Void> itemInvalid() {
+        return itemInvalid;
+    }
+
+    SingleLiveEvent<Void> hideKeyboard() {
+        return hideKeyboard;
     }
 
     void addShoppingListItem(String shoppingListItemName) {
+        hideKeyboard.call();
+
         if (Strings.isNullOrEmpty(shoppingListItemName)) {
-            shoppingListItemValid.setValue(false);
+            itemInvalid.call();
             return;
         }
-        shoppingListItemValid.setValue(true);
         loadShoppingListAndAddItem(shoppingListItemName);
     }
 
@@ -66,11 +71,9 @@ class AddShoppingListItemViewModel extends ViewModel {
         disposables.add(addShoppingListItemUseCase.execute(shoppingList, shoppingListItemName)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
-                .subscribe(updatedShoppingList -> shoppingListItemAdded.setValue(true),
-                        throwable -> {
-                            Timber.e(throwable);
-                            shoppingListItemAdded.setValue(true);
-                        })
-        );
+                .subscribe(updatedShoppingList -> itemAdded.setValue(true), throwable -> {
+                    Timber.e(throwable);
+                    itemAdded.setValue(false);
+                }));
     }
 }
