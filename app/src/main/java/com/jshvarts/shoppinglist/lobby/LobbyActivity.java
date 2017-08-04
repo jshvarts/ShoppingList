@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.FrameLayout;
 
 import com.jshvarts.shoppinglist.R;
-import com.jshvarts.shoppinglist.lobby.fragments.AddShoppingListItemFragment;
 import com.jshvarts.shoppinglist.lobby.fragments.ViewShoppingListFragment;
 
 import javax.inject.Inject;
@@ -40,14 +39,16 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
 
         setSupportActionBar(toolbar);
 
-        attachViewShoppingListFragment();
+        if (savedInstanceState == null) {
+            // Activity has not been recreated
+            attachViewShoppingListFragment();
+        }
     }
 
     @Override
     public void onBackPressed() {
         Fragment shoppingListFragment = getSupportFragmentManager().findFragmentByTag(ViewShoppingListFragment.TAG);
-        Fragment addToShoppingListFragment = shoppingListFragment.getChildFragmentManager().findFragmentByTag(AddShoppingListItemFragment.TAG);
-        if (addToShoppingListFragment != null) {
+        if (shoppingListFragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
             shoppingListFragment.getChildFragmentManager().popBackStack();
         } else {
             finish();
@@ -60,11 +61,6 @@ public class LobbyActivity extends AppCompatActivity implements HasSupportFragme
     }
 
     private void attachViewShoppingListFragment() {
-        if (isViewShoppingListFragmentAttached()) {
-            // fragment was already recreated. likely due to orientation change
-            return;
-        }
-
         Fragment shoppingListFragment = new ViewShoppingListFragment();
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, shoppingListFragment, ViewShoppingListFragment.TAG)
