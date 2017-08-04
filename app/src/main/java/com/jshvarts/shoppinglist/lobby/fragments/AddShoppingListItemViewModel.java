@@ -25,6 +25,8 @@ class AddShoppingListItemViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> shoppingListItemAdded = new SingleLiveEvent<>();
 
+    private MutableLiveData<Boolean> shoppingListItemValid = new SingleLiveEvent<>();
+
     AddShoppingListItemViewModel(AddShoppingListItemUseCase addShoppingListItemUseCase,
                                  LoadShoppingListUseCase loadShoppingListUseCase,
                                  SchedulersFacade schedulersFacade) {
@@ -37,11 +39,16 @@ class AddShoppingListItemViewModel extends ViewModel {
         return shoppingListItemAdded;
     }
 
+    LiveData<Boolean> isItemValid() {
+        return shoppingListItemValid;
+    }
+
     void addShoppingListItem(String shoppingListItemName) {
         if (Strings.isNullOrEmpty(shoppingListItemName)) {
-            shoppingListItemAdded.setValue(false);
+            shoppingListItemValid.setValue(false);
             return;
         }
+        shoppingListItemValid.setValue(true);
         loadShoppingListAndAddItem(shoppingListItemName);
     }
 
@@ -60,7 +67,10 @@ class AddShoppingListItemViewModel extends ViewModel {
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
                 .subscribe(updatedShoppingList -> shoppingListItemAdded.setValue(true),
-                        throwable -> Timber.e(throwable))
+                        throwable -> {
+                            Timber.e(throwable);
+                            shoppingListItemAdded.setValue(true);
+                        })
         );
     }
 }

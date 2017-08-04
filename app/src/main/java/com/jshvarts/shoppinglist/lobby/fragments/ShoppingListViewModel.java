@@ -26,6 +26,8 @@ class ShoppingListViewModel extends ViewModel {
 
     private MutableLiveData<ShoppingList> liveShoppingList = new MutableLiveData<>();
 
+    private MutableLiveData<Boolean> loadingIndicatorStatus = new MutableLiveData<>();
+
     ShoppingListViewModel(LoadShoppingListUseCase loadShoppingListUseCase,
                           UpdateShoppingListUseCase updateShoppingListUseCase,
                           SchedulersFacade schedulersFacade,
@@ -45,13 +47,23 @@ class ShoppingListViewModel extends ViewModel {
         return liveShoppingList;
     }
 
+    LiveData<Boolean> getLoadingIndicatorStatus() {
+        return loadingIndicatorStatus;
+    }
+
     void loadShoppingList() {
         disposables.add(loadShoppingListUseCase.loadShoppingList(DatabaseConstants.DEFAULT_SHOPPING_LIST_ID)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())
-                .subscribe(shoppingList -> liveShoppingList.setValue(shoppingList),
-                        throwable -> Timber.e(throwable))
-        );
+                .doOnSubscribe(s -> loadingIndicatorStatus.setValue(true))
+                .subscribe(shoppingList -> {
+                        liveShoppingList.setValue(shoppingList);
+                        loadingIndicatorStatus.setValue(false);
+                    }, throwable -> {
+                        Timber.e(throwable);
+                        loadingIndicatorStatus.setValue(false);
+                    }
+                ));
     }
 
     void completeShoppingListItem(int itemIndex) {

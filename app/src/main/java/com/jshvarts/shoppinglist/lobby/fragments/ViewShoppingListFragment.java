@@ -14,6 +14,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.jshvarts.shoppinglist.R;
@@ -42,6 +43,9 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
     @BindView(R.id.shopping_list_recycler_view)
     RecyclerView recyclerView;
+
+    @BindView(R.id.loading_indicator)
+    ProgressBar loadingIndicator;
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
@@ -105,6 +109,8 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
         viewModel = ViewModelProviders.of(getActivity(), shoppingListViewModelFactory).get(ShoppingListViewModel.class);
         viewModel.loadShoppingList();
+
+        viewModel.getLoadingIndicatorStatus().observe(this, isActive -> loadingIndicator.setVisibility(isActive ? View.VISIBLE : View.GONE));
 
         viewModel.getShoppingList().observe(this, shoppingList -> {
             displayShoppingList(shoppingList);
