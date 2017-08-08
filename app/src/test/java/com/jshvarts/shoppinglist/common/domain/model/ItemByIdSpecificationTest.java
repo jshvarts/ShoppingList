@@ -7,7 +7,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Unit tests for {@link @ItemByIdSpecification}.
+ * Unit tests for {@link ItemByIdSpecification}.
  */
 public class ItemByIdSpecificationTest {
 
@@ -21,7 +21,7 @@ public class ItemByIdSpecificationTest {
     }
 
     @Test
-    public void getId() throws Exception {
+    public void getId_returnsId() throws Exception {
         // WHEN
         String result = testSubject.getId();
 
