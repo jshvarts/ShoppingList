@@ -28,7 +28,10 @@ def excluded = [
         '**/App*.class',
         '**/BuildConfig*',
         '**/*.json',
-        '**/test/*'
+        '**/test/*',
+        '**/ShoppingList.class',
+        '**/ShoppingListItem.class',
+        '**/DatabaseConstants.class'
 ]
 
 buildTypes.each { buildType ->
