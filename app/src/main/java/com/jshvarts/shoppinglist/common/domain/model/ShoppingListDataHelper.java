@@ -1,7 +1,5 @@
 package com.jshvarts.shoppinglist.common.domain.model;
 
-import timber.log.Timber;
-
 /**
  * Encapsulates common functionality for a shopping list.
  */
