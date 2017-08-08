@@ -16,6 +16,7 @@ project.ext {
     junitVersion = "4.12"
     mockitoVersion = "2.7.22"
     javaHamcrestVersion = "2.0.0.0"
+    powerMockVersion = "1.7.0RC4"
 }
 
 android {
@@ -113,6 +114,9 @@ dependencies {
 
     // Hamcrest
     testCompile "org.hamcrest:java-hamcrest:$project.javaHamcrestVersion"
+
+    // PowerMock
+    testCompile "org.powermock:powermock-core:$project.powerMockVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
