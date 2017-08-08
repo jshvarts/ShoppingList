@@ -13,6 +13,9 @@ project.ext {
     guavaVersion = "20.0"
     supportDesignVersion = "25.4.0"
     seismicVersion = "1.0.2"
+    junitVersion = "4.12"
+    mockitoVersion = "2.7.22"
+    javaHamcrestVersion = "2.0.0.0"
 }
 
 android {
@@ -34,12 +37,19 @@ android {
         multiDexEnabled true
     }
     buildTypes {
+        debug {
+            //applicationIdSuffix = ".debug"
+            testCoverageEnabled = true
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
+
+apply from: "$rootDir/config/jacoco.gradle"
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -77,8 +87,8 @@ dependencies {
     implementation "com.google.firebase:firebase-database:$project.firebaseVersion"
 
     //Firebase Auth with Google acct
-    compile "com.google.firebase:firebase-auth:$project.firebaseVersion"
-    compile "com.google.android.gms:play-services-auth:$project.firebaseVersion"
+    //compile "com.google.firebase:firebase-auth:$project.firebaseVersion"
+    //compile "com.google.android.gms:play-services-auth:$project.firebaseVersion"
 
     // Guava
     compile "com.google.guava:guava:$project.guavaVersion"
@@ -94,6 +104,15 @@ dependencies {
 
     // Seismic, device shake detection
     compile "com.squareup:seismic:$project.seismicVersion"
+
+    // JUnit
+    testCompile "junit:junit:$project.junitVersion"
+
+    // Mockito
+    testCompile "org.mockito:mockito-core:$project.mockitoVersion"
+
+    // Hamcrest
+    testCompile "org.hamcrest:java-hamcrest:$project.javaHamcrestVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
