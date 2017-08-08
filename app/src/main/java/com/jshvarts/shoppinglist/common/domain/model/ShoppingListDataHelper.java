@@ -44,6 +44,9 @@ public class ShoppingListDataHelper {
         }
     }
 
+    /**
+     * Recursively removes one completed item at a time
+     */
     public void removeCompletedItems(final ShoppingList shoppingList) {
         if (shoppingList.getItems().isEmpty()) {
             return;
