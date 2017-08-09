@@ -96,7 +96,12 @@ public class FirebaseShoppingListRepository implements Repository<ShoppingList> 
     @Override
     public Single<ShoppingList> add(ShoppingList shoppingList) {
         DatabaseReference shoppingListRef = database.getReference().push();
-        shoppingListRef.setValue(shoppingList);
+        shoppingListRef.setValue(shoppingList, (databaseError, databaseReference) -> {
+            if (databaseError != null) {
+                Timber.e(databaseError.toException(), "add:databaseError.");
+                Single.error(databaseError.toException());
+            }
+        });
         shoppingList.setId(shoppingListRef.getKey());
         return Single.just(shoppingList);
     }
@@ -104,7 +109,12 @@ public class FirebaseShoppingListRepository implements Repository<ShoppingList> 
     @Override
     public Single<ShoppingList> update(ShoppingList shoppingList) {
         DatabaseReference shoppingListRef = database.getReference().child(shoppingList.getId());
-        shoppingListRef.setValue(shoppingList);
+        shoppingListRef.setValue(shoppingList, (databaseError, databaseReference) -> {
+            if (databaseError != null) {
+                Timber.e(databaseError.toException(), "update:databaseError.");
+                Single.error(databaseError.toException());
+            }
+        });
         return Single.just(shoppingList);
     }
 

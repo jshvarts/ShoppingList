@@ -49,9 +49,4 @@ public class ShoppingList {
     public Long getTimestampLong() {
         return timestamp;
     }
-
-    @Override
-    public String toString() {
-        return id;
-    }
 }
