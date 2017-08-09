@@ -10,7 +10,8 @@
         android:paddingTop="?attr/actionBarSize"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/layout_animation_fall_down" />
 
     <ProgressBar
         android:id="@+id/loading_indicator"

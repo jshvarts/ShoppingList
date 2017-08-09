@@ -136,7 +136,8 @@ public class ViewShoppingListFragment extends LifecycleFragment {
         // investigate clearing and invalidating adapter instead
         recyclerViewAdapter = new ShoppingListAdapter(shoppingList.getItems());
         recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerViewAdapter.notifyDataSetChanged();
+        recyclerView.getAdapter().notifyDataSetChanged();
+        recyclerView.scheduleLayoutAnimation();
     }
 
     private void attachAddShoppingListItemFragment() {
