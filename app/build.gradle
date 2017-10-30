@@ -13,6 +13,7 @@ project.ext {
     guavaVersion = "20.0"
     supportDesignVersion = "25.4.0"
     seismicVersion = "1.0.2"
+    priorityJobQueueVersion = "2.0.1"
     junitVersion = "4.12"
     mockitoVersion = "2.7.22"
     javaHamcrestVersion = "2.0.0.0"
@@ -20,12 +21,12 @@ project.ext {
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.jshvarts.shoppinglist"
-        minSdkVersion 19
-        targetSdkVersion 25
+        minSdkVersion 20
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -105,6 +106,9 @@ dependencies {
 
     // Seismic, device shake detection
     compile "com.squareup:seismic:$project.seismicVersion"
+
+    // Priority Job Queue
+    compile "com.birbit:android-priority-jobqueue:$project.priorityJobQueueVersion"
 
     // JUnit
     testCompile "junit:junit:$project.junitVersion"
