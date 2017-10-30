@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 
 project.ext {
-    supportLibraryVersion = "25.4.0"
-    daggerVersion = "2.11"
-    butterKnifeVersion = "8.5.1"
+    supportLibraryVersion = "26.0.2"
+    daggerVersion = "2.12"
+    butterKnifeVersion = "8.7.0"
     rxJavaVersion = "2.1.0"
     rxAndroidVersion = "2.0.1"
     timberVersion = "4.5.1"
@@ -11,7 +11,6 @@ project.ext {
     firebaseVersion="11.0.2"
     multiDexVersion = "1.0.1"
     guavaVersion = "20.0"
-    supportDesignVersion = "25.4.0"
     seismicVersion = "1.0.2"
     priorityJobQueueVersion = "2.0.1"
     junitVersion = "4.12"
@@ -96,7 +95,7 @@ dependencies {
     compile "com.google.guava:guava:$project.guavaVersion"
 
     // Support Design
-    compile "com.android.support:design:$project.supportDesignVersion"
+    compile "com.android.support:design:$project.supportLibraryVersion"
 
     // CardView
     compile "com.android.support:cardview-v7:$project.supportLibraryVersion"
