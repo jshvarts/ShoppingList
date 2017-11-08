@@ -58,12 +58,9 @@ public class ViewShoppingListFragment extends LifecycleFragment {
 
     private ShoppingListViewModel viewModel;
 
-    private boolean initialDataDisplay = true;
-
     private FragmentManager.OnBackStackChangedListener backStackChangedListener = () -> {
         if (getChildFragmentManager().getBackStackEntryCount() > 0) {
             fab.hide();
-            initialDataDisplay = false;
         } else {
             showFabWithDelay();
         }
@@ -140,9 +137,6 @@ public class ViewShoppingListFragment extends LifecycleFragment {
         recyclerViewAdapter = new ShoppingListAdapter(shoppingList.getItems());
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.getAdapter().notifyDataSetChanged();
-        if (initialDataDisplay) {
-            recyclerView.scheduleLayoutAnimation();
-        }
     }
 
     private void attachAddShoppingListItemFragment() {
