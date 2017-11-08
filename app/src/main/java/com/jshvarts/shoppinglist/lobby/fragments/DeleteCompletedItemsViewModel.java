@@ -76,13 +76,11 @@ public class DeleteCompletedItemsViewModel extends AndroidViewModel implements S
     }
 
     private void deleteCompletedItems(ShoppingList shoppingList) {
-        int itemCount = shoppingList.getItems().size();
-        if (itemCount == 0 || !shoppingList.getItems().get(itemCount - 1).getCompleted()) {
-            // no completed items
+        if (!shoppingListDataHelper.removeCompletedItems(shoppingList)) {
+            Timber.d("shake but no completed items available");
             return;
         }
         Timber.d("deleting completed items after shake");
-        shoppingListDataHelper.removeCompletedItems(shoppingList);
         disposables.add(updateShoppingListUseCase.updateShoppingList(shoppingList)
                 .subscribeOn(schedulersFacade.io())
                 .observeOn(schedulersFacade.ui())

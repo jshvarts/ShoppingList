@@ -10,9 +10,11 @@ import com.jshvarts.shoppinglist.common.domain.model.ItemsSpecification;
 import com.jshvarts.shoppinglist.common.domain.model.Repository;
 import com.jshvarts.shoppinglist.common.domain.model.ShoppingList;
 import com.jshvarts.shoppinglist.common.domain.model.ItemByIdSpecification;
+import com.jshvarts.shoppinglist.common.domain.model.ShoppingListItemNameComparator;
 import com.jshvarts.shoppinglist.common.domain.model.Specification;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -28,8 +30,7 @@ public class FirebaseShoppingListRepository implements Repository<ShoppingList> 
 
     public FirebaseShoppingListRepository() {
         database = FirebaseDatabase.getInstance();
-        // TODO re-enable below closer to project completion
-        //database.setPersistenceEnabled(true);
+        database.setPersistenceEnabled(true);
     }
 
     @Override
@@ -75,6 +76,8 @@ public class FirebaseShoppingListRepository implements Repository<ShoppingList> 
                     if (dataSnapshot.exists()) {
                         ShoppingList shoppingList = dataSnapshot.getValue(ShoppingList.class);
                         shoppingList.setId(dataSnapshot.getKey());
+                        // TODO ideally left Firebase API do the sorting
+                        Collections.sort(shoppingList.getItems(), new ShoppingListItemNameComparator());
                         emitter.onNext(shoppingList);
                     }
                 }
@@ -88,7 +91,6 @@ public class FirebaseShoppingListRepository implements Repository<ShoppingList> 
 
             DatabaseReference shoppingListRef = database.getReference().child(byIdSpecification.getId());
             shoppingListRef.addValueEventListener(valueEventListener);
-
             emitter.setCancellable(() -> shoppingListRef.removeEventListener(valueEventListener));
         });
     }
